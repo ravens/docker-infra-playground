@@ -16,5 +16,6 @@ rancher:
     ubuntu-console: true
 EOF
 
+echo "About to install on the harddrive"
 sudo ros install --no-reboot -f -t generic -c cloud-config.yml -d /dev/sda
 sudo reboot

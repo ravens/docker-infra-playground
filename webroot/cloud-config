@@ -1,0 +1,8 @@
+# cloud-config
+# https://rancher.com/docs/os/v1.x/en/installation/configuration/
+hostname: goldorak
+rancher:
+  resize_device: /dev/sda
+  console: ubuntu
+  password: labpassword
+

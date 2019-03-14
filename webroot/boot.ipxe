@@ -1,8 +1,10 @@
 #!ipxe
 
-# This script is called once the iPXE engine is loaded on the virtual node. With Infrasim, the node is by default running iPXE. On a physical node, you would probably use legacy PXE to boot an iPXE client to be able to boot over iSCSI, HTTP etc.
+# Boot a persistent RancherOS to RAM
 
-dhcp
+# Location of Kernel/Initrd images
+set base-url http://releases.rancher.com/os/latest
 
-# netboot over HTTP because the embedded iPXE in infrasim is not supporting HTTPS :-(
-chain --autofree http://boot.netboot.xyz
+kernel ${base-url}/vmlinuz rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda] rancher.cloud_init.datasources=[url:http://192.168.25.3/cloud-config]
+initrd ${base-url}/initrd
+boot

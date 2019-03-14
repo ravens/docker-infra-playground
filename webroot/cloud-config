@@ -6,5 +6,9 @@ rancher:
   services:
     nginx:
       image: nginx
-      labels:
-        io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker
+      ports:
+        - "80:80"
+#      labels:
+
+
+#        io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker

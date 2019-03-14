@@ -1,19 +1,10 @@
-#!/bin/sh
-
-# Generate cloud config
-cat > "cloud-config.yml" <<EOF
 #cloud-config
-ssh_authorized_keys:
-  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF8HVcorEtgXnznzLrvl5S3vq94Ljhqwp1WeCYvIgDQJpDmrOJSNvkwI1oOQeQBm1SpUOlzImilMzzOuSxp0U7np3PTiVY8tMTabA66VjAR8gtt7H4eHX1ccrWPdc0G7Gvr98uoO4/SoL3peMOUwRG6igRNF61ZeOakP6nvmRYK5OJvYxWgKs4NcKq9/HZ9Kh9zoPpFE+1oWS2HnepCrKloaTJ9g7u/KDpHNo/lkW1TYmn1ocDUvFKo1cQOSvaNTlq89nsXbxvbVztJZ4kAaEk6NdUp4S0IsMtncZ7UqpCKhDIBv7wJNCd7y6+RDFg3OWPcCSU6oSEvWgZeicmQry7 yan@saratoga.local
 rancher:
-  state:
-    dev: LABEL=RANCHER_STATE
-    fstype: auto
-    autoformat:
-      - /dev/sda
-  services_include:
-    ubuntu-console: true
-EOF
-
-sudo ros install --no-reboot -f -t generic -c cloud-config.yml -d /dev/sda
-sudo reboot
+  # Create arbitrary system service started at boot. Useful for running monitoring agents, etc.
+  # https://rancher.com/docs/os/v1.x/en/installation/system-services/custom-system-services/
+  services:
+    my-service:
+      command: "tail -f /dev/null"
+      image: gcr.io/google_containers/busybox:latest
+      labels:
+        io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker

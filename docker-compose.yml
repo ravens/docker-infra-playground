@@ -37,17 +37,6 @@ services:
       lab:
         ipv4_address: 192.168.25.3
 
-# SSH access to the node 
-  ssh:
-    image: alpine/socat
-    ports:
-       - "2222:22"
-    entrypoint:
-       - /usr/bin/socat
-       - tcp-listen:2222,fork,reuseaddr
-       - TCP4:192.168.25.100:22
-
-
 #  one virtual node booting over iPXE
   node:
     image: infrasim/infrasim-compute:3.5.1 
@@ -69,5 +58,5 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun
-      # - /dev/kvm # activate this if you want nested KVM support
+      - /dev/kvm # activate this if you want nested KVM support
    

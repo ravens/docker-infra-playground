@@ -5,7 +5,7 @@
 # Location of Kernel/Initrd images
 set base-url http://releases.rancher.com/os/latest
 
-kernel ${base-url}/vmlinuz rancher.password=rancher console=tty1 printk.devkmsg=on panic=10 rancher.cloud_init.datasources=[url:http://192.168.25.3/cloud-config]
+kernel ${base-url}/vmlinuz rancher.password=labpassword console=tty1 printk.devkmsg=on panic=10 rancher.cloud_init.datasources=[url:http://192.168.25.3/cloud-config]
 initrd ${base-url}/initrd
 boot
 

@@ -1,20 +1,42 @@
 #!/bin/sh
 
 # Generate cloud config
-
 cat > "cloud-config.yml" <<EOF
 #cloud-config
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF8HVcorEtgXnznzLrvl5S3vq94Ljhqwp1WeCYvIgDQJpDmrOJSNvkwI1oOQeQBm1SpUOlzImilMzzOuSxp0U7np3PTiVY8tMTabA66VjAR8gtt7H4eHX1ccrWPdc0G7Gvr98uoO4/SoL3peMOUwRG6igRNF61ZeOakP6nvmRYK5OJvYxWgKs4NcKq9/HZ9Kh9zoPpFE+1oWS2HnepCrKloaTJ9g7u/KDpHNo/lkW1TYmn1ocDUvFKo1cQOSvaNTlq89nsXbxvbVztJZ4kAaEk6NdUp4S0IsMtncZ7UqpCKhDIBv7wJNCd7y6+RDFg3OWPcCSU6oSEvWgZeicmQry7 yan@saratoga.local
+write_files:
+  - path: /etc/ssh/sshd_config
+    permissions: "0600"
+    owner: root:root
+    content: |
+      AuthorizedKeysFile .ssh/authorized_keys
+      ClientAliveInterval 180
+      Subsystem	sftp /usr/libexec/sftp-server
+      UseDNS no
+      PermitRootLogin no
+      ServerKeyBits 2048
+      AllowGroups docker
 rancher:
+  password: rancher
+  network:
+    dns:
+      override: true
+      nameservers:
+        - 8.8.8.8
+        - 1.1.1.1
+    interfaces:
+      eth0:
+        dhcp: true
   state:
     dev: LABEL=RANCHER_STATE
     fstype: auto
     autoformat:
       - /dev/sda
   services_include:
-    ubuntu-console: true
+    centos-console: true
 EOF
 
-echo "About to install on the harddrive"
-sudo ros install --no-reboot -f -t generic -c cloud-config.yml -d /dev/sda
+# Install RancherOS to disk, then reboot
+sudo ros install --no-reboot -f -t generic -c cloud-config.yml -d /dev/vda
+sudo reboot

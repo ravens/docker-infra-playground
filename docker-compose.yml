@@ -37,6 +37,15 @@ services:
       lab:
         ipv4_address: 192.168.25.3
 
+# ssh node to jump in the lab network
+  ssh: 
+    build: ./ssh
+    ports:
+      - "2222:22"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.4
+
 #  one virtual node booting over iPXE
   node:
     image: infrasim/infrasim-compute:3.5.1 
@@ -47,13 +56,13 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.4
+      - BMC_IP=192.168.25.5
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.4
+        ipv4_address: 192.168.25.5
     cap_add:
       - NET_ADMIN
     devices:

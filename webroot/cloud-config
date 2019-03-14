@@ -1,10 +1,10 @@
 #cloud-config
+
 rancher:
   # Create arbitrary system service started at boot. Useful for running monitoring agents, etc.
   # https://rancher.com/docs/os/v1.x/en/installation/system-services/custom-system-services/
   services:
-    my-service:
-      command: "tail -f /dev/null"
-      image: gcr.io/google_containers/busybox:latest
+    nginx:
+      image: nginx
       labels:
         io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker

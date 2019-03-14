@@ -1,0 +1,8 @@
+#!ipxe
+
+# This script is called once the iPXE engine is loaded on the virtual node. With Infrasim, the node is by default running iPXE. On a physical node, you would probably use legacy PXE to boot an iPXE client to be able to boot over iSCSI, HTTP etc.
+
+dhcp
+
+# netboot over HTTP because the embedded iPXE in infrasim is not supporting HTTPS :-(
+chain --autofree http://boot.netboot.xyz

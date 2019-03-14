@@ -1,0 +1,28 @@
+---
+name: default
+type: quanta_d51
+compute:
+    boot:
+        splash: /usr/local/infrasim/data/boot_logo.jpg
+    cpu:
+        quantities: 2
+        type: Haswell 
+        #type: host
+        #kvm_enabled: true
+    memory:
+        size: 2048 
+    storage_backend:
+        -
+            type: ahci
+            max_drive_per_controller: 6 
+            drives:
+            -
+                size: 8
+    networks:
+        -
+            network_mode: bridge 
+            network_name: br-bmc
+            device: e1000
+            mac: 00:aa:bb:cc:dd:ee
+    bmc:
+        interface: br-bmc

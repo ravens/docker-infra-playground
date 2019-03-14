@@ -9,6 +9,27 @@ I am using the following software components :
  * docker and docker-compose to run the 2 services (DHCP, web server) to serve a minimal bootstrapping environment around PXE. 
  * infrasim and QEMU to simulate a virtual node with a proper BMC (so IPMI protocol is available, like a physical node)
 
+On the network side I am relying on default bridge from Docker. When the virtual node is initiated, I create an internal bridge with the original interface within the namespace so that QEMU can later on bridge its own TAP interface with it. 
+
+This is the architectural diagram:
+```
+                                                            ┌────────┐                                           
+                                                            │        ├──────────────┐                            
+                                                            │  QEMU  │  PXE: DHCP   │                            
+                                                            │        ├──────────────┘                            
+    ┌───────────┐    ┌───────────┐        ┌─────────────────┴────────┴──────┐                                    
+    │           │    │           │        │                ┌─────────────┐  │                                    
+    │  dnsmasq  │    │  httpd    │        │  infrasim      │   br-bmc    │  │                                    
+    │           │    │           │        │                └──────┬──────┘  │                                    
+    └────┬──────┘    └────┬──────┘        └───────────────────────┼─────────┘                                    
+         │                │                                       │                  ┌───────────────────────┐   
+         │                │                                       │                  │    192.168.25.0/24    │   
+─────────▼────────────────▼───────────────────────────────────────▼──────────────────┴───────────────────────┴──▶
+ ┌───────────────┐ ┌───────────────┐                ┌─────────────────────┐                                      
+ │ 192.168.25.2  │ │ 192.168.25.3  │                │  BMC: 192.168.25.4  │                                      
+ └───────────────┘ └───────────────┘                └─────────────────────┘                                      
+```
+
 ## build and run
 
 We use images stored on Docker Hub, although we are building a small image for dnsmasq due to the lack of more official image:

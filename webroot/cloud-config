@@ -1,14 +1,34 @@
 #cloud-config
-
 rancher:
+  network:
+    interfaces:
+      br0:
+        bridge: true
+        dhcp: true
+      eth0:
+        bridge: br0
+  resize_device: /dev/sda
   # Create arbitrary system service started at boot. Useful for running monitoring agents, etc.
   # https://rancher.com/docs/os/v1.x/en/installation/system-services/custom-system-services/
   services:
-    nginx:
-      image: nginx
-      ports:
-        - "80:80"
-#      labels:
-
-
-#        io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker
+     nginx:
+       image: nginx
+       ports:
+         - "80:80"
+     sshd:
+       image: rastasheep/ubuntu-sshd:18.04
+       ports:
+         - "2222:22"
+       devices:
+         - /dev/kvm
+       #labels:
+# #        io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker
+# Execute an arbitrary script at boot after all system services have been started.
+# Ref: https://rancher.com/docs/os/v1.x/en/installation/configuration/write-files/
+# write_files:
+#   - path: /etc/rc.local
+#     permissions: "0755"
+#     owner: root
+#     content: |
+#       #!/bin/bash
+#       echo "I'm doing things on start"

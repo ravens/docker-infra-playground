@@ -1,34 +1,58 @@
 #cloud-config
-rancher:
-  network:
-    interfaces:
-      br0:
-        bridge: true
-        dhcp: true
-      eth0:
-        bridge: br0
-  resize_device: /dev/sda
-  # Create arbitrary system service started at boot. Useful for running monitoring agents, etc.
-  # https://rancher.com/docs/os/v1.x/en/installation/system-services/custom-system-services/
-  services:
-     nginx:
-       image: nginx
-       ports:
-         - "80:80"
-     sshd:
-       image: rastasheep/ubuntu-sshd:18.04
-       ports:
-         - "2222:22"
-       devices:
-         - /dev/kvm
-       #labels:
-# #        io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker
-# Execute an arbitrary script at boot after all system services have been started.
-# Ref: https://rancher.com/docs/os/v1.x/en/installation/configuration/write-files/
-# write_files:
-#   - path: /etc/rc.local
-#     permissions: "0755"
-#     owner: root
-#     content: |
-#       #!/bin/bash
-#       echo "I'm doing things on start"
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
+write_files:
+  - path: /mnt/rancher-os.yaml
+    permissions: "0755"
+    owner: root
+    content: |
+      #cloud-config
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
+      hostname: ranchermaster
+      rancher:
+        console: ubuntu
+        network:
+         interfaces:
+          br0:
+           bridge: true
+           dhcp: true
+          eth0:
+           bridge: br0
+runcmd:
+- curl -o /tmp/rancheros.iso https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
+- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda
+
+# #cloud-config
+# rancher:
+#   network:
+#     interfaces:
+#       br0:
+#         bridge: true
+#         dhcp: true
+#       eth0:
+#         bridge: br0
+#   resize_device: /dev/sda
+#   services:
+#     rancheragent:
+#       image: rancher/rancher-agent:v2.1.6
+#       privileged: true
+#       volumes:
+#         - "/var/run:/var/run"
+#         - "/etc/kubernetes:/etc/kubernetes"
+#       net: host
+#       restart: unless-stopped
+#       command: --server https://192.168.25.5 --token 4tzw5qr9wzg7wsshcv27lfbshv4wqvlxp99k4p2f5rmltgbm6wdv4l --ca-checksum 834a503b20c03d0c36b39f46a5cf481f688403a1c4d53a41268b9c51ff3376e4 --etch --controlplane --worker
+#       labels:
+#         io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker
+#      # server:
+#      #    image: rancher/k3s:v0.1.0
+#      #    command: server --disable-agent
+#      #    volumes:
+#      #      - "/tmp/k3soutput:/output"
+#      #    environment:
+#      #      - K3S_CLUSTER_SECRET=somethingtotallyrandom
+#      #      - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
+#      #      - K3S_KUBECONFIG_MODE=666
+#      #    ports:
+#      #      - 6443:6443

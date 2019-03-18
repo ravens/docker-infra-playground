@@ -42,9 +42,24 @@ services:
     build: ./ssh
     ports:
       - "2222:22"
+    volumes:
+      - "./keys/id_rsa:/root/.ssh/id_rsa"
+      - "./keys/id_rsa.pub:/root/.ssh/id_rsa.pub"
     networks:
       lab:
         ipv4_address: 192.168.25.4
+
+# Web UI from Rancher to orchestrate K3S cluster
+  # rancher:
+  #   image: rancher/rancher:latest
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - "./rancherdata:/var/lib/rancher"
+  #   networks:
+  #     lab:
+  #       ipv4_address: 192.168.25.5
 
 #  one virtual node booting over iPXE
   node:
@@ -56,16 +71,60 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.5
+      - BMC_IP=192.168.25.6
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.5
+        ipv4_address: 192.168.25.6
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun
       - /dev/kvm # activate this if you want nested KVM support
    
+  # node1:
+  #   image: infrasim/infrasim-compute:3.5.1 
+  #   volumes:
+  #     - "./virtualnode/node1.yml:/root/.infrasim/.node_map/default.yml"
+  #     - "./virtualnode/run.sh:/root/run.sh"
+  #   entrypoint:
+  #     - /bin/bash
+  #     - /root/run.sh
+  #   environment:
+  #     - BMC_IP=192.168.25.7
+  #   ports:
+  #     - "5902:5901"
+  #     - "624:623/udp"
+  #   networks:
+  #     lab:
+  #       ipv4_address: 192.168.25.7
+  #   cap_add:
+  #     - NET_ADMIN
+  #   devices:
+  #     - /dev/net/tun
+  #     - /dev/kvm # activate this if you want nested KVM support
+
+
+  # node2:
+  #   image: infrasim/infrasim-compute:3.5.1 
+  #   volumes:
+  #     - "./virtualnode/node2.yml:/root/.infrasim/.node_map/default.yml"
+  #     - "./virtualnode/run.sh:/root/run.sh"
+  #   entrypoint:
+  #     - /bin/bash
+  #     - /root/run.sh
+  #   environment:
+  #     - BMC_IP=192.168.25.8
+  #   ports:
+  #     - "5903:5901"
+  #     - "625:623/udp"
+  #   networks:
+  #     lab:
+  #       ipv4_address: 192.168.25.8
+  #   cap_add:
+  #     - NET_ADMIN
+  #   devices:
+  #     - /dev/net/tun
+  #     - /dev/kvm # activate this if you want nested KVM support

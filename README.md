@@ -105,17 +105,17 @@ docker-compose up
 
 ## interact with the virtual environment
 
-### console access to the virtual nodes on the virtual lab network
+### kubectl access to the virtual nodes on the virtual lab network
 
+Once the 3 nodes have joined, the cluster will be operational. You can monitor the state within Rancher UI on https://localhost of the physical host executing the docker-compose.yml:
 ```
 ssh localhost -l root -p 2222 # password *labpassword*, as defined in ssh/Dockerfile then
-# to access the first node, second node or third node
-ssh 192.168.25.100 -l rancher docker ps -a 
-ssh 192.168.25.101 -l rancher docker ps -a 
-ssh 192.168.25.102 -l rancher docker ps -a 
+mkdir -p /root/.kube/
+cat > /root/.kube/config # copy the kubeconfig.yaml from Rancher UI
+kubectl create clusterrolebinding permissive-binding --clusterrole=cluster-admin --user=admin --user=kubelet --group=system:serviceaccounts # remove RBAC
+helm init --history-max 200
+helm repo update 
 ```
-
-Once the 3 nodes have joined, the cluster will be operational. 
 
 ### monitor the virtual nodes 
 

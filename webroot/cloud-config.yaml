@@ -13,7 +13,7 @@ rancher:
   services:
     agent: #docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.1.7 --server https://192.168.25.5 --token crzg8njscbjj5jvmspr2n296xbjnscxngcqbq9p7whnk8rmcnzwhsc --ca-checksum cff5e0914947cea872c159547355548c3773cf13422bc000fab06a4a1a8e361a --etcd --controlplane --worker
       image: rancher/rancher-agent:v2.1.7
-      command: --server https://192.168.25.5 --token crzg8njscbjj5jvmspr2n296xbjnscxngcqbq9p7whnk8rmcnzwhsc --ca-checksum cff5e0914947cea872c159547355548c3773cf13422bc000fab06a4a1a8e361a --etcd --controlplane 
+      command: --server https://192.168.25.5 --token blpl2qxqvl2wf5d8jqbtnxrhkn5wc9ct4qqgs52lslmwnc7mhxqb9j --ca-checksum 283042a9bec012eccbfc8f3da10fc472dc9fa7dca35b5eafa6594314b616654e --etcd --controlplane 
       volumes:
         - "/var/run:/var/run"
         - "/etc/kubernetes:/etc/kubernetes"

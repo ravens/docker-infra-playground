@@ -1,7 +1,7 @@
 # docker-infra-playground, RancherOS branch
 Docker-based infrastructure deployment playground. Check the [master](https://github.com/ravens/docker-infra-playground/tree/master) branch to understand how the playground environment is typically working.
 
-In this branch we explore RancherOS as a support OS to boot and configure and run K3s, a lightweight Kubernetes cluster, also from Rancher.
+In this branch we explore [RancherOS](https://github.com/rancher/os) as a support OS to boot and configure and run [K3s](https://github.com/rancher/k3s), a lightweight Kubernetes cluster, also from Rancher.
 
 ## architecture 
 
@@ -105,7 +105,13 @@ ssh 192.168.25.102 -l rancher
 
 To see the kubeconfig generated for this k3s cluster : 
 ```
-ssh 192.168.25.100 -l rancher cat /tmp/k3soutput/kubeconfig.yaml
+ssh localhost -l root -p 2222 # need to jump to the ssh service that has access to the lab network
+mkdir /root/.kube
+ssh 192.168.25.100 -l rancher cat /tmp/k3soutput/kubeconfig.yaml > /root/.kube/config 
+sed -i s,localhost,192.168.25.100,g /root/.kube/config # we recover and adapt the IP of the k3s cluster
+kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   14m
 ```
 
 kubectl can now be use to control the minimal k3s cluster.

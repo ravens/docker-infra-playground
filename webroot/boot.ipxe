@@ -3,23 +3,30 @@
 # Boot a persistent RancherOS to RAM
 
 # Location of Kernel/Initrd images
-set base-url http://releases.rancher.com/os/latest
+#set base-url http://releases.rancher.com/os/latest
+set base-url http://192.168.25.3
+set provision-url http://192.168.25.3
+
 
 iseq ${hostname} rancherserver && goto server ||
 goto node
 
 :node
-set cloud-config cloud-config.node
+set cloud-config cloud-config.bootstrap.node.yaml
 goto rancher
 
 :server
-set cloud-config cloud-config
+set cloud-config cloud-config.bootstrap.yaml
 goto rancher
 
 :rancher
-#kernel ${base-url}/vmlinuz console=tty1 printk.devkmsg=on panic=10 rancher.password=labpassword rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda] rancher.cloud_init.datasources=[url:http://192.168.25.3/${cloud-config}] 
-kernel ${base-url}/vmlinuz rancher.state.dev=LABEL=RANCHER_STATE rancher.password=labpassword rancher.state.noformat rancher.cloud_init.datasources=[url:http://192.168.25.3/${cloud-config}]
-#kernel ${base-url}/vmlinuz console=tty1 printk.devkmsg=on panic=10 rancher.password=labpassword rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda] rancher.cloud_init.datasources=[url:http://192.168.25.3/${cloud-config}] 
+kernel ${base-url}/vmlinuz rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
 initrd ${base-url}/initrd
 boot
+
+
+# Attic
+#rancher.state.dev=LABEL=RANCHER_STATE rancher.password=labpassword rancher.state.noformat rancher.autologin=true 
+#kernel ${base-url}/vmlinuz console=tty1 printk.devkmsg=on panic=10 rancher.password=labpassword rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda] rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
+
 

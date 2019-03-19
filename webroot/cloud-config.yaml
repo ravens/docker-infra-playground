@@ -1,27 +1,30 @@
 #cloud-config
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
-write_files:
-  - path: /mnt/rancher-os.yaml
-    permissions: "0755"
-    owner: root
-    content: |
-      #cloud-config
-      ssh_authorized_keys:
-        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
-      hostname: ranchermaster
-      rancher:
-        console: ubuntu
-        network:
-         interfaces:
-          br0:
-           bridge: true
-           dhcp: true
-          eth0:
-           bridge: br0
-runcmd:
-- curl -o /tmp/rancheros.iso https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
-- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda
+rancher:
+  network:
+    interfaces:
+      br0:
+        bridge: true
+        dhcp: true
+      eth0:
+        bridge: br0
+  resize_device: /dev/sda
+  services:
+    k3sserver:
+      image: rancher/k3s:v0.1.0
+      command: server --disable-agent
+      volumes:
+        - "/tmp/k3soutput:/output"
+      environment:
+        - K3S_CLUSTER_SECRET=somethingtotallyrandom
+        - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
+        - K3S_KUBECONFIG_MODE=666
+      ports:
+        - 6443:6443
+#https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
+
+#- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda
 
 # #cloud-config
 # rancher:

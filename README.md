@@ -5,23 +5,27 @@ In this branch we explore RancherOS as a support OS to boot and configure and ru
 
 ## architecture 
 
-This is based on a mixture of microservices (for hosting the main infrastructure support, i.e. PXE bootstraping) and as well serving the minimim OS image to load on the virtual server cluster.
+This is based on a mixture of microservices (for hosting the main infrastructure support, i.e. PXE bootstraping) and as well serving the minimum OS image to load on the virtual server cluster.
 
-In our [docker-compose.yml](./docker-compose.yml) we define 3 nodes using infrasim:
+In our [docker-compose.yml](./docker-compose.yml) we define 3 nodes using an infrasim-based docker:
  * a master, that will run K3s as server (DHCP IP 192.168.25.100)
  * 2 workers that will run K3s workers (DHCP IP 192.168.25.101 + 102)
 
 We then have support services :
  * a DHCP and PXE UDP server at 192.168.25.2
- * a web server to serve the files to bootstrap the servers from scratch
+ * a web server to serve the files to bootstrap the servers from scratch at 192.168.25.3
 
- Interestings files that contain the configuration logic :
-  * [boot.ipxe](./webroot/boot.ipxe)
-  * [cloud-config.bootstrap.yaml](./webroot/cloud-config.bootstrap.yaml) to perform the first boot of the server and reformat it and configure the remote provisioning through a new cloud-config file
+Interestings files that contain the configuration logic :
+  * [boot.ipxe](./webroot/boot.ipxe) which is executed at PXE boot
+  * [cloud-config.bootstrap.yaml](./webroot/cloud-config.bootstrap.yaml) to perform the first boot of the server, reformat it and configure the remote provisioning through a new cloud-config file
   * [cloud-config.yaml](./webroot/cloud-config.yaml) which is the actual configuration file (ssh keys, network interface, services...)
   * [cloud-config.bootstrap.yaml](./webroot/cloud-config.bootstrap.node.yaml) and [cloud-config.yaml](./webroot/cloud-config.node.yaml) for the worker node
 
   This is a playground, so there are no real optimization or clever use of the RancherOS yet. Just a basic usecase to start with playing with it.
+
+Todos:
+ * investigate if we can install RancherOS directly from the ramdisk rather then downloading a full ISO image and mounting it
+ * prepare a kubectl environement within the SSH microservices to consume the K3S cluster
 
 ## prepare
 

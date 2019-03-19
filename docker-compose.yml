@@ -50,16 +50,16 @@ services:
         ipv4_address: 192.168.25.4
 
 # Web UI from Rancher to orchestrate K3S cluster
-  # rancher:
-  #   image: rancher/rancher:latest
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - "./rancherdata:/var/lib/rancher"
-  #   networks:
-  #     lab:
-  #       ipv4_address: 192.168.25.5
+  rancher:
+     image: rancher/rancher:latest
+     ports:
+       - "80:80"
+       - "443:443"
+     volumes:
+       - "./rancherdata:/var/lib/rancher"
+     networks:
+       lab:
+         ipv4_address: 192.168.25.5
 
 #  one virtual node booting over iPXE
   node:

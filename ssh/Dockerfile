@@ -20,3 +20,8 @@ RUN apt-get update &&  apt-get install -yq curl
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl
 RUN  mv ./kubectl /usr/local/bin/kubectl
+RUN wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.0-linux-amd64.tar.gz
+RUN tar xvzf helm-v2.13.0-linux-amd64.tar.gz
+RUN mv linux-amd64/helm linux-amd64/tiller  /usr/local/bin/
+RUN chmod ugo+x /usr/local/bin/helm /usr/local/bin/tiller 
+RUN rm -Rf linux-amd64/

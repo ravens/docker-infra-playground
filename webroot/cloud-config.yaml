@@ -11,17 +11,14 @@ rancher:
         bridge: br0
   resize_device: /dev/sda
   services:
-    k3sserver:
-      image: rancher/k3s:v0.1.0
-      command: server --disable-agent
+    agent: #docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.1.7 --server https://192.168.25.5 --token crzg8njscbjj5jvmspr2n296xbjnscxngcqbq9p7whnk8rmcnzwhsc --ca-checksum cff5e0914947cea872c159547355548c3773cf13422bc000fab06a4a1a8e361a --etcd --controlplane --worker
+      image: rancher/rancher-agent:v2.1.7
+      command: --server https://192.168.25.5 --token crzg8njscbjj5jvmspr2n296xbjnscxngcqbq9p7whnk8rmcnzwhsc --ca-checksum cff5e0914947cea872c159547355548c3773cf13422bc000fab06a4a1a8e361a --etcd --controlplane 
       volumes:
-        - "/tmp/k3soutput:/output"
-      environment:
-        - K3S_CLUSTER_SECRET=somethingtotallyrandom
-        - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
-        - K3S_KUBECONFIG_MODE=666
-      ports:
-        - 6443:6443
+        - "/var/run:/var/run"
+        - "/etc/kubernetes:/etc/kubernetes"
+      net: host
+      privileged: true
 #https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
 
 #- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda

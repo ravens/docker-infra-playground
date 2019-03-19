@@ -11,15 +11,14 @@ rancher:
         bridge: br0
   resize_device: /dev/sda
   services:
-    k3snode:
-      image: rancher/k3s:v0.1.0
-      tmpfs:
-        - /run
-        - /var/run
+    agent: #docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.1.7 --server https://192.168.25.5 --token crzg8njscbjj5jvmspr2n296xbjnscxngcqbq9p7whnk8rmcnzwhsc --ca-checksum cff5e0914947cea872c159547355548c3773cf13422bc000fab06a4a1a8e361a --etcd --controlplane --worker
+      image: rancher/rancher-agent:v2.1.7
+      command: --server https://192.168.25.5 --token crzg8njscbjj5jvmspr2n296xbjnscxngcqbq9p7whnk8rmcnzwhsc --ca-checksum cff5e0914947cea872c159547355548c3773cf13422bc000fab06a4a1a8e361a --worker
+      volumes:
+        - "/var/run:/var/run"
+        - "/etc/kubernetes:/etc/kubernetes"
+      net: host
       privileged: true
-      environment:
-        - K3S_URL=https://192.168.25.100:6443
-        - K3S_CLUSTER_SECRET=somethingtotallyrandom
     # rancheragent:
     #   image: rancher/rancher-agent:v2.1.6
     #   privileged: true

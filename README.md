@@ -1,5 +1,14 @@
 # docker-infra-playground
-Docker-based infrastructure deployment playground.
+Docker-based infrastructure deployment playground. 
+
+
+## inspiration 
+
+XKCD, volume 350 : https://www.xkcd.com/350/
+
+![No Windows here](https://imgs.xkcd.com/comics/network.png)
+
+Except this will be used with mostly Linux-based OSes and telco related stuff.
 
 ## background
 

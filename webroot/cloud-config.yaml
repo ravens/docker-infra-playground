@@ -10,6 +10,8 @@ rancher:
       eth0:
         bridge: br0
   resize_device: /dev/sda
+  docker:
+    insecure_registry: ["http://192.168.25.5:5000"]
   services:
       nginx44:
         image: nginx

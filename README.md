@@ -28,6 +28,10 @@ We use images stored on Docker Hub, although we are building a small image for d
 ```
 docker-compose pull && docker-compose build && docker-compose up
 ```
+## relevant config file
+
+ * [boot.ipxe](webroot/boot.ipxe) kernel, image and parameters to boot the installer image.
+ * [preseed.cfg](webroot/preseed.cfg) actual ubuntu installation parameters
 
 
 

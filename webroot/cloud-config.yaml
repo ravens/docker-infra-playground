@@ -11,17 +11,10 @@ rancher:
         bridge: br0
   resize_device: /dev/sda
   services:
-    k3sserver:
-      image: rancher/k3s:v0.1.0
-      command: server --disable-agent
-      volumes:
-        - "/tmp/k3soutput:/output"
-      environment:
-        - K3S_CLUSTER_SECRET=somethingtotallyrandom
-        - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
-        - K3S_KUBECONFIG_MODE=666
-      ports:
-        - 6443:6443
+      nginx44:
+        image: nginx
+        ports:
+          - 80:80
 #https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
 
 #- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda

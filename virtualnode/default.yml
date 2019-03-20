@@ -6,9 +6,8 @@ compute:
         splash: /usr/local/infrasim/data/boot_logo.jpg
     cpu:
         quantities: 2
-        type: Haswell 
-        #type: host
-        #kvm_enabled: true
+        type: host
+        kvm_enabled: true
     memory:
         size: 2048 
     storage_backend:

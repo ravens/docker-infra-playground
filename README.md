@@ -51,6 +51,10 @@ docker-compose up
 
 ## interact with the virtual environment
 
+```
+
+```
+
 ### console access to the virtual nodes on the virtual lab network
 
 ```

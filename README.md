@@ -24,7 +24,6 @@ Interestings files that contain the configuration logic :
   * [boot.ipxe](./webroot/boot.ipxe) which is executed at PXE boot
   * [cloud-config.bootstrap.yaml](./webroot/cloud-config.bootstrap.yaml) to perform the first boot of the server, reformat it and configure the remote provisioning through a new cloud-config file
   * [cloud-config.yaml](./webroot/cloud-config.yaml) which is the actual configuration file (ssh keys, network interface, services...)
-  * [cloud-config.bootstrap.yaml](./webroot/cloud-config.bootstrap.node.yaml) and [cloud-config.yaml](./webroot/cloud-config.node.yaml) for the worker node
 
   This is a playground, so there are no real optimization or clever use of the RancherOS yet. Just a basic usecase to start with playing with it.
 

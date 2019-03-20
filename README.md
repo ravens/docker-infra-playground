@@ -86,3 +86,5 @@ node_1  | 2019-03-14 12:58:23,423 - Qemu - qemu.py:151 - INFO - qemu stopped
 I am adding branches on that repository with example of testbed :
  * [rancherOS+k3s](https://github.com/ravens/docker-infra-playground/tree/rancheros) quick and dirty 3 nodes cluster for k3s, the lightweight kubernetes from Rancher
  * [rancherOS+rancherUI+rancher-agent](https://github.com/ravens/docker-infra-playground/tree/rancheros-rancher) 3 nodes cluster for the Kubernetes managed by Rancher UI
+ * [ubuntu]((https://github.com/ravens/docker-infra-playground/tree/ubuntu) a simple one node automated install of ubuntu 18.04
+ * [centos](https://github.com/ravens/docker-infra-playground/tree/centos) a simple one node automated install of centos 7

@@ -53,9 +53,24 @@ services:
     image: registry:2
     ports:
       - "5000:5000"
+    volumes:
+      - "./registry:/var/lib/registry"
     networks:
       lab:
         ipv4_address: 192.168.25.5
+
+  registryui: 
+    image: quiq/docker-registry-ui
+    depends_on:
+      - registry
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./registryui/config.yml:/opt/config.yml"
+      - "./registryui/data:/opt/data"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.6
 
 #  one virtual node booting over iPXE
   node:
@@ -71,13 +86,13 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.6
+      - BMC_IP=192.168.25.7
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.6
+        ipv4_address: 192.168.25.7
     cap_add:
       - NET_ADMIN
     devices:

@@ -1,0 +1,26 @@
+  vyos-nfv:
+    build: ./
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm
+    # entrypoint:
+    #   - /usr/bin/qemu-system-x86_64 
+    #   - -nographic 
+    #   - -serial 
+    #   - mon:stdio 
+    #   - -netdev 
+    #   - bridge,id=hn0 
+    #   - -device 
+    #   - virtio-net-pci,netdev=hn0,id=nic1 
+    #   - -m 
+    #   - "512" 
+    #   - -smp 
+    #   - "1" 
+    #   - -machine 
+    #   - type=pc,accel=kvm 
+    #   - -drive 
+    #   - file=/root/vyos.img,if=virtio,cache=writeback,discard=ignore,format=qcow2 
+    #   - -boot 
+    #   - once=d

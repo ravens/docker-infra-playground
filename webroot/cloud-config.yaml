@@ -2,6 +2,10 @@
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
 rancher:
+  docker:
+    registry_mirror: "http://192.168.25.5:5000"
+    insecure_registry:
+      - "192.168.25.0/24"
   network:
     interfaces:
       br0:
@@ -10,13 +14,18 @@ rancher:
       eth0:
         bridge: br0
   resize_device: /dev/sda
-  docker:
-    insecure_registry: ["http://192.168.25.5:5000"]
   services:
-      nginx44:
-        image: nginx
-        ports:
-          - 80:80
+      router:
+        image: 192.168.25.5:5000/vyos
+        net: host
+        cap_add:
+          - NET_ADMIN
+        devices:
+          - /dev/net/tun
+          - /dev/kvm
+
+
+
 #https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
 
 #- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda

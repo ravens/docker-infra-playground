@@ -1,7 +1,7 @@
 # docker-infra-playground, RancherOS vCPE branch
 Docker-based infrastructure deployment playground. Check the [master](https://github.com/ravens/docker-infra-playground/tree/master) branch to understand how the playground environment is typically working.
 
-In this branch we explore [RancherOS](https://github.com/rancher/os) as a support OS to boot and configure and run a vCPE NFV on top of the supporting OS.
+In this branch we explore [RancherOS](https://github.com/rancher/os) as a support OS to boot and configure and later run a vCPE NFV function based on VyOS. 
 
 ## architecture 
 
@@ -61,7 +61,7 @@ wget http://releases.rancher.com/os/latest/initrd # Ramdisk to be booted on via 
 ```
 
 Then we need to build the container running the VM with the VyOS router software. 
-We can then run the registryui container : 
+We can now run the registryui container (that will instanciate a Docker registry) : 
 ```
 docker-compose up -d registryui
 ```
@@ -77,13 +77,13 @@ docker tag vyos-nfv_vyos-nfv:latest localhost:5000/vyos
 docker push localhost:5000/vyos
 ```
 
-This will generate the vyos.img in the vyos-nfv/build directory we will need for the vyos container image, and ship the resulting container in the lab registry. 
+This will generate the vyos.img in the vyos-nfv/build directory, that we will need for the vyos container image, and ship the resulting container in the lab registry. 
 
 We can now run safely the rest of the lab infrastructure and our virtual node :
 ```
 docker-compose up
 ```
-The virtual node will put over PXE, install RancherOS on its hardrive, reboot and initiate a "router" service which is our VyOS NFV function instanciated with QEMU/KVM.  
+The virtual node will boot over PXE, install RancherOS on its hardrive at first boot, reboot and initiate a "router" service which is our VyOS NFV function instanciated with QEMU/KVM.  
 
 ### console access to the virtual nodes on the virtual lab network
 

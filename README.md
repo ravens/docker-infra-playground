@@ -90,4 +90,5 @@ The virtual node will boot over PXE, install RancherOS on its hardrive at first 
 ```
 ssh localhost -l root -p 2222 # password *labpassword*, as defined in ssh/Dockerfile then
 ssh 192.168.25.100 -l rancher # to jump on the rancherOS virtualnode
+ssh 192.168.25.101 -l labuser # to jump on the VyOS router
 ```

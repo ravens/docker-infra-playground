@@ -88,3 +88,4 @@ I am adding branches on that repository with example of testbed :
  * [rancherOS+rancherUI+rancher-agent](https://github.com/ravens/docker-infra-playground/tree/rancheros-rancher) 3 nodes cluster for the Kubernetes managed by Rancher UI
  * [ubuntu](https://github.com/ravens/docker-infra-playground/tree/ubuntu) a simple one node automated install of ubuntu 18.04
  * [centos](https://github.com/ravens/docker-infra-playground/tree/centos) a simple one node automated install of centos 7
+ * [rancherOS+VyOS](https://github.com/ravens/docker-infra-playground/tree/rancheros-vcpe) a one node with a VyOS VM running from RancherOS

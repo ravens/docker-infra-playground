@@ -30,7 +30,7 @@ cd vyos-nfv
 packer build -var-file=vyos-var.json vyos-image.json
 docker-compose build
 docker tag vyos-nfv_vyos-nfv:latest localhost:5000/vyos
-	
+docker push localhost:5000/vyos
 ```
 
 This will generate the vyos.img in the vyos-nfv/build directory we will need for the vyos container image, and ship the resulting container in the lab registry. 

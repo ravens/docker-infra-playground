@@ -5,6 +5,48 @@ In this branch we explore [RancherOS](https://github.com/rancher/os) as a suppor
 
 ## architecture 
 
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                                                                               │
+│                                                                                                                                               │
+│                                                                                                                                               │
+│                                                                                                                                               │
+│                                                                                                                                               │
+│                                                                                                                                               │
+│                                                                             ┌────────────────┬────────────────────────────────┐               │
+│                                                                             │                │                                │               │
+│                                                                             │ Rancher        │ router     QEMU  + VyOS QCOW   │               │
+│                                                                             │ OS .100        │ container                      │               │
+│        ┌───────────┐    ┌────────┐    ┌────────┐                            ├────────────────┼────────────────────────────────┘               │
+│        │           │    │        │    │        │                            │ QEMU           │                                                │
+│        │  dnsmasq  │    │  httpd │    │  sshd  │                            ├────────┬───────┘                                                │
+│        │           │    │        │    │        │                            │ br-bmc │                                                        │
+│        └────┬──────┘    └────┬───┘    └───┬────┘                            └───┬────┘                                                        │
+│             │                │            │                                     │                         ┌───────────────────────┐           │
+│             │                │            │                                     │                         │    192.168.25.0/24    │           │
+│    ─────────▼────────────────▼────────────▼─────────────────────────────────────▼─────────────────────────┴───────────────────────┴───▶       │
+│     ┌───────────────┐ ┌───────────────┐ ┌───────────────┐   ┌──────────────────────────────────────────────────────┐                          │
+│     │ 192.168.25.2  │ │ 192.168.25.3  │ │ 192.168.25.4  │   │       BMC: 192.168.25.6 (VNC+IPMI) - InfraSIM        │                          │
+│     └─┬────────────┬┘ └─┬────────────┬┘ └─┬────────────┬┘   └────────────────┬────────────────────────┬────────────┘                          │
+│       │ Container  │    │ Container  │    │ Container  │                     │                        │                                       │
+│       └────────────┘    └────────────┘    └─────┬──────┘                     │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│                                                 │                            │                        │                                       │
+│     Physical host running docker-compose up     │                            │                        │                                       │
+│     KVM required                                │                            │                        │                                       │
+└─────────────────────────────────────────────────┼────────────────────────────┼────────────────────────┼───────────────────────────────────────┘
+                                                  │                            │                        │                                        
+                                                  ▼                            ▼                        ▼                                        
+                             ┌─────┐    ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐                            
+                             │Ports│    │   Port 2222 (SSH)   │    │   Port 5901 (VNC)   │    │   Port 623 (IPMI)   │                            
+                             └─────┘    └─────────────────────┘    └─────────────────────┘    └─────────────────────┘                            
+```
 
 ## infrastructure preparation
 
@@ -39,18 +81,11 @@ We can now run safely the rest of the lab infrastructure and our virtual node :
 ```
 docker-compose up
 ```
-
-
-## interact with the virtual environment
-
-```
-
-```
+The virtual node will put over PXE, install RancherOS on its hardrive, reboot and initiate a "router" service which is our VyOS NFV function instanciated with QEMU/KVM.  
 
 ### console access to the virtual nodes on the virtual lab network
 
 ```
 ssh localhost -l root -p 2222 # password *labpassword*, as defined in ssh/Dockerfile then
-# to access the first node, second node or third node
-ssh 192.168.25.100 -l rancher 
+ssh 192.168.25.100 -l rancher # to jump on the rancherOS virtualnode
 ```

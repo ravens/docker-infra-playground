@@ -45,6 +45,7 @@
         "set system login user {{user `user`}} authentication public-keys identifier key '{{user `sshpubkey`}}'<enter><wait>",
         "set system login user {{user `user`}} authentication public-keys identifier type ssh-rsa<enter><wait>",
         "set service ssh<enter><wait>",
+        "set service salt-minion master 192.168.25.7<enter><wait>",
         "commit<enter><wait10>",
         "save<enter><wait>",
         "exit<enter><wait>",

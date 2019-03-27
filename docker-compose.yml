@@ -72,6 +72,18 @@ services:
       lab:
         ipv4_address: 192.168.25.6
 
+  saltmaster:
+    image: soon/salt-master
+    # volumes:
+    # - "./salt-pki:/etc/salt/pki"
+    # - "./salt-cache:/var/cache/salt"
+    # - "./salt-log:/var/logs/salt"
+    # - "./salt-master:/etc/salt/master.d"
+    # - "./salt:/srv/salt"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.7
+
 #  one virtual node booting over iPXE
   node:
     depends_on:
@@ -86,13 +98,13 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.7
+      - BMC_IP=192.168.25.8
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.7
+        ipv4_address: 192.168.25.8
     cap_add:
       - NET_ADMIN
     devices:

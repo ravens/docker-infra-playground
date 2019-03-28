@@ -74,6 +74,8 @@ services:
 
   saltmaster:
     build: ./saltmaster
+    ports:
+      - "8080:8080"
     # volumes:
     # - "./salt-pki:/etc/salt/pki"
     # - "./salt-cache:/var/cache/salt"
@@ -83,6 +85,16 @@ services:
     networks:
       lab:
         ipv4_address: 192.168.25.7
+
+  # cloudserver:
+  #   depends_on:
+  #     - saltmaster
+  #   build: ./cloudserver
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     lab:
+  #       ipv4_address: 192.168.25.8
 
 #  one virtual node booting over iPXE
   node:
@@ -98,13 +110,13 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.8
+      - BMC_IP=192.168.25.9
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.8
+        ipv4_address: 192.168.25.9
     cap_add:
       - NET_ADMIN
     devices:

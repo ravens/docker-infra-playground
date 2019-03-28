@@ -16,3 +16,6 @@ COPY salt-api.conf /etc/salt/master.d/salt-api.conf
 EXPOSE 4505 4506 8080
 #ENTRYPOINT ["/usr/bin/salt-master","--log-level=info"]
 ENTRYPOINT ["/usr/bin/supervisord","-c","/root/salt-supervisor.conf"]
+
+RUN adduser --disabled-password --gecos "" labuser
+RUN echo labuser:labpassword | chpasswd

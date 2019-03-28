@@ -7,26 +7,26 @@ http.createServer(function (request, response) {
 
 console.log('Server started');
 
-const Salt = require("salt-api");
+// const Salt = require("salt-api");
 
-const salt = new Salt({
-	url: "http://192.168.25.7:8080/hook",
-	username: "labuser",
-	password: "labpassword"
-});
+// const salt = new Salt({
+// 	url: "http://192.168.25.7:8080",
+// 	username: "labuser",
+// 	password: "labpassword"
+// });
 
 
-salt.ready.then(() => {
+// salt.ready.then(() => {
 
-	console.log("Salt ready...")
+// 	console.log("Salt ready...")
 
-	/*// Same as running `salt "*" test.ping` in the command line
-	salt.fun("*", "test.ping").then(data => {
+// 	// Same as running `salt "*" test.ping` in the command line
+// 	salt.fun("*", "test.ping").then(data => {
 
-		// Do something with the data
-		console.log(data);
-		// { return: [ { b827eb3aaaf7: true, b827ebcc82fe: true } ] }
+// 		// Do something with the data
+// 		console.log(data);
+// 		// { return: [ { b827eb3aaaf7: true, b827ebcc82fe: true } ] }
 
-	}).catch(e => console.error(e));*/
+// 	}).catch(e => console.error(e));
 
-});
+// });

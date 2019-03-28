@@ -1,4 +1,4 @@
-FROM node:boron
+FROM node:11
 WORKDIR /usr/src/app
 ENV NODE_ENV production
 COPY package.json package-lock.json ./

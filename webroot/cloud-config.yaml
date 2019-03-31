@@ -6,6 +6,10 @@ rancher:
     registry_mirror: "http://192.168.25.5:5000"
     insecure_registry:
       - "192.168.25.0/24"
+  system_docker:
+    registry_mirror: "http://192.168.25.5:5000"
+    insecure_registry:
+      - "192.168.25.0/24"
   network:
     interfaces:
       br0:
@@ -15,51 +19,25 @@ rancher:
         bridge: br0
   resize_device: /dev/sda
   services:
-      router:
-        image: 192.168.25.5:5000/vyos
-        net: host
-        cap_add:
-          - NET_ADMIN
-        devices:
-          - /dev/net/tun
-          - /dev/kvm
-
-
-
-#https://github.com/rancher/os/releases/download/v1.5.1/rancheros.iso 
-
-#- sudo ros install -f -c /mnt/rancher-os.yaml -d /dev/sda
-
-# #cloud-config
-# rancher:
-#   network:
-#     interfaces:
-#       br0:
-#         bridge: true
-#         dhcp: true
-#       eth0:
-#         bridge: br0
-#   resize_device: /dev/sda
-#   services:
-#     rancheragent:
-#       image: rancher/rancher-agent:v2.1.6
-#       privileged: true
-#       volumes:
-#         - "/var/run:/var/run"
-#         - "/etc/kubernetes:/etc/kubernetes"
-#       net: host
-#       restart: unless-stopped
-#       command: --server https://192.168.25.5 --token 4tzw5qr9wzg7wsshcv27lfbshv4wqvlxp99k4p2f5rmltgbm6wdv4l --ca-checksum 834a503b20c03d0c36b39f46a5cf481f688403a1c4d53a41268b9c51ff3376e4 --etch --controlplane --worker
-#       labels:
-#         io.rancher.os.scope: system # Runs service in system-docker, remove to run in User Docker
-#      # server:
-#      #    image: rancher/k3s:v0.1.0
-#      #    command: server --disable-agent
-#      #    volumes:
-#      #      - "/tmp/k3soutput:/output"
-#      #    environment:
-#      #      - K3S_CLUSTER_SECRET=somethingtotallyrandom
-#      #      - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
-#      #      - K3S_KUBECONFIG_MODE=666
-#      #    ports:
-#      #      - 6443:6443
+        saltminion:
+          image: 192.168.25.5:5000/saltminion-service
+          privileged: true
+          labels:
+            io.rancher.os.scope: system
+            io.rancher.os.after: console
+          volumes_from:
+              - all-volumes
+          restart: always
+          pid: host
+          ipc: host
+          net: host
+          uts: host
+        vyosrouter:
+           image: 192.168.25.5:5000/vyos-vm-service
+           restart: always
+           net: host
+           cap_add:
+             - NET_ADMIN
+           devices:
+             - /dev/net/tun
+             - /dev/kvm

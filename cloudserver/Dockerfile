@@ -1,7 +1,7 @@
 FROM node:11
 WORKDIR /usr/src/app
 ENV NODE_ENV production
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
 COPY . .
 EXPOSE 3000

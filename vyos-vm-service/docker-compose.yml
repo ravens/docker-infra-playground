@@ -1,4 +1,4 @@
-  vyos-nfv:
+vyos-vm-service:
     build: ./
     cap_add:
       - NET_ADMIN

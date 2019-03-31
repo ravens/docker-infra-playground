@@ -2,7 +2,6 @@ FROM ubuntu:16.04
 MAINTAINER Yan Grunenberger <yan@grunenberger.net>
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
-RUN apt install -qy python-dev python-virtualenv gcc
 
 # ssh daemon, following docker example : https://docs.docker.com/engine/examples/running_ssh_service/
 RUN apt-get install -y openssh-server

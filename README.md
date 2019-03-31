@@ -55,9 +55,10 @@ In this branch we explore [RancherOS](https://github.com/rancher/os) as a suppor
 We need to fetch RancherOS files to be able to boot locally:
 ```
 cd webroot
-wget http://releases.rancher.com/os/latest/rancheros.iso # ISO to be installed on the virtual disk
-wget http://releases.rancher.com/os/latest/vmlinuz # Kernel image to be booted on via PXE
-wget http://releases.rancher.com/os/latest/initrd # Ramdisk to be booted on via PXE
+wget https://releases.rancher.com/os/latest/rancheros.iso # ISO to be installed on the virtual disk
+wget https://releases.rancher.com/os/latest/vmlinuz # Kernel image to be booted on via PXE
+wget https://releases.rancher.com/os/latest/initrd # Ramdisk to be booted on via PXE
+cd ..
 ```
 
 Then we need to build the container running the VM with the VyOS router software. 
@@ -70,20 +71,31 @@ This will make a registry available on port 5000 and its web interface for debug
 
 Time to build the vyos image. For this we use packer and docker-compose :
 ```
-cd vyos-nfv
+cd vyos-vm-service
+# in case packer is needed : wget https://releases.hashicorp.com/packer/1.3.5/packer_1.3.5_linux_amd64.zip && 
 packer build -var-file=vyos-var.json vyos-image.json
 docker-compose build
-docker tag vyos-nfv_vyos-nfv:latest localhost:5000/vyos
-docker push localhost:5000/vyos
+docker tag vyos-vm-service_vyos-vm-service:latest localhost:5000/vyos-vm-service
+docker push localhost:5000/vyos-vm-service
+cd ..
 ```
 
-This will generate the vyos.img in the vyos-nfv/build directory, that we will need for the vyos container image, and ship the resulting container in the lab registry. 
+This will generate the vyos.img in the vyos-nfv/build directory, that we will need for the yos-vm-service container image, and ship the resulting container in the lab registry. 
+
+We need now to prepare the saltminion container service that will be loaded in the RancherOS at boot. Using again docker-compose:
+```
+cd saltminion-service
+docker-compose build
+docker tag saltminion-service_saltminion-service:latest localhost:5000/saltminion-service
+docker push localhost:5000/saltminion-service
+cd ..
+```
 
 We can now run safely the rest of the lab infrastructure and our virtual node :
 ```
 docker-compose up
 ```
-The virtual node will boot over PXE, install RancherOS on its hardrive at first boot, reboot and initiate a "router" service which is our VyOS NFV function instanciated with QEMU/KVM.  
+The virtual node will boot over PXE, install RancherOS on its hardrive at first boot, reboot and initiate a "router" service which is our VyOS NFV function instanciated with QEMU/KVM. You can watch the progress using VNC on localhost:5901.
 
 ### console access to the virtual nodes on the virtual lab network
 

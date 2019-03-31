@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 MAINTAINER Yan Grunenberger <yan@grunenberger.net>
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update

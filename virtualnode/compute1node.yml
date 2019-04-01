@@ -9,7 +9,7 @@ compute:
         type: host
         kvm_enabled: true
     memory:
-        size: 2048 
+        size: 4096 
     storage_backend:
         -
             type: ahci

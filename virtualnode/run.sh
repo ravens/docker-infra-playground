@@ -16,13 +16,35 @@ echo "Management interface within container is ${BMC_INTF}"
 echo "Configuring management bridge"
 INTERFACE=${BMC_INTF}
 BRIDGE=br-bmc
+IP=${BMC_IP}
 ip addr flush dev $INTERFACE
 ip link set $INTERFACE promisc on
 brctl addbr $BRIDGE
 brctl addif $BRIDGE $INTERFACE
 brctl setfd $BRIDGE 0
 brctl sethello $BRIDGE 1
-ip addr add ${BMC_IP}/24 dev $BRIDGE
+ip addr add ${IP}/24 dev $BRIDGE
+ip link set $BRIDGE up
+fi
+
+if [ -z ${DATAPLANE_IP} ]  
+then
+echo "Error: you should set the Dataplace IP variable so that we can attach our internal bridge to the right overlay network"
+exit
+else
+export DATAPLANE_INTF=`netstat -ie | grep -B1 ${DATAPLANE_IP} | head -n1 | cut -d ":" -f 1 | cut -d " " -f1`
+echo "Dataplane interface within container is ${DATAPLANE_INTF}"
+echo "Configuring dataplane bridge"
+INTERFACE=${DATAPLANE_INTF}
+BRIDGE=br-dataplane
+IP=${DATAPLANE_IP}
+ip addr flush dev $INTERFACE
+ip link set $INTERFACE promisc on
+brctl addbr $BRIDGE
+brctl addif $BRIDGE $INTERFACE
+brctl setfd $BRIDGE 0
+brctl sethello $BRIDGE 1
+ip addr add ${IP}/24 dev $BRIDGE
 ip link set $BRIDGE up
 fi
 

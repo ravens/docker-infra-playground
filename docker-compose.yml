@@ -13,9 +13,16 @@ networks:
       -
         subnet: 192.168.25.0/24
 
-services:
+  dataplane: 
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.26.0/24
 
 
+services: 
 # DHCP server to serve IP + PXE TFTP server
   dhcp:
     build: ./dhcp
@@ -37,24 +44,85 @@ services:
       lab:
         ipv4_address: 192.168.25.3
 
+  ssh:
+    build: ./ssh
+    ports:
+      - "2222:22"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.4
+
 
 #  one virtual node booting over iPXE
-  node:
+  controllernode:
     image: infrasim/infrasim-compute:3.5.1 
     volumes:
-      - "./virtualnode/default.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/controllernode.yml:/root/.infrasim/.node_map/default.yml"
       - "./virtualnode/run.sh:/root/run.sh"
     entrypoint:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.4
+      - BMC_IP=192.168.25.5
+      - DATAPLANE_IP=192.168.26.5
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.4
+        ipv4_address: 192.168.25.5
+      dataplane:
+        ipv4_address: 192.168.26.5
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+
+  computenode1:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/compute1node.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.6
+      - DATAPLANE_IP=192.168.26.6
+    ports:
+      - "5902:5901"
+      - "624:623/udp"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.6
+      dataplane:
+        ipv4_address: 192.168.26.6
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+
+  computenode2:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/compute2node.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.7
+      - DATAPLANE_IP=192.168.26.7
+    ports:
+      - "5903:5901"
+      - "625:623/udp"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.7
+      dataplane:
+        ipv4_address: 192.168.26.7
     cap_add:
       - NET_ADMIN
     devices:

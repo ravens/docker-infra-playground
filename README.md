@@ -89,3 +89,4 @@ I am adding branches on that repository with example of testbed :
  * [ubuntu](https://github.com/ravens/docker-infra-playground/tree/ubuntu) a simple one node automated install of ubuntu 18.04
  * [centos](https://github.com/ravens/docker-infra-playground/tree/centos) a simple one node automated install of centos 7
  * [rancherOS+VyOS](https://github.com/ravens/docker-infra-playground/tree/rancheros-vcpe) a one node with a VyOS VM running from RancherOS
+ * [kolla](https://github.com/ravens/docker-infra-playground/tree/kolla) a 3 nodes with the goal to auto deploy Openstack Kolla on a controller with 2 computes nodes

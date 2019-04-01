@@ -48,6 +48,13 @@ services:
     build: ./ssh
     ports:
       - "2222:22"
+    volumes:
+      - "./ssh/kolla:/etc/kolla" 
+      - "./ssh/inventory:/inventory"
+    extra_hosts:
+      - "controller:192.168.25.100"
+      - "compute1:192.168.25.101"
+      - "compute2:192.168.25.102"
     networks:
       lab:
         ipv4_address: 192.168.25.4

@@ -13,3 +13,20 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
+
+RUN apt-get -qy install python-pip
+RUN apt-get -qy install python-dev libffi-dev gcc libssl-dev python-selinux python-setuptools
+RUN pip install ansible 
+#RUN pip install kolla-ansible
+WORKDIR /root
+RUN apt-get -qy install git
+RUN git clone https://github.com/openstack/kolla-ansible.git
+WORKDIR /root/kolla-ansible
+RUN git checkout stable/rocky
+RUN pip install -r  requirements.txt
+RUN python setup.py install
+RUN apt-get -qy install ssh sshpass
+RUN pip install python-openstackclient
+RUN echo "[defaults]\nhost_key_checking = False" > /root/.ansible.cfg 
+RUN apt-get -qy install vim
+RUN pip install crudini

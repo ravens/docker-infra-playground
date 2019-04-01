@@ -6,5 +6,5 @@ dhcp
 set base-url http://es.archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/current/images/netboot/ubuntu-installer/amd64
 kernel ${base-url}/linux
 initrd ${base-url}/initrd.gz
-imgargs linux auto=true priority=critical preseed/url=http://192.168.25.3/preseed.cfg
+imgargs linux auto=true priority=critical preseed/url=http://192.168.25.3/preseed.cfg interface=enp0s3
 boot

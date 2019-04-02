@@ -3,7 +3,7 @@
 # This script is called once the iPXE engine is loaded on the virtual node. With Infrasim, the node is by default running iPXE. On a physical node, you would probably use legacy PXE to boot an iPXE client to be able to boot over iSCSI, HTTP etc.
 
 dhcp
-set base-url http://fr.archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/current/images/netboot/ubuntu-installer/amd64
+set base-url http://fr.archive.ubuntu.com/ubuntu/dists/xenial-updates/main/installer-amd64/current/images/hwe-netboot/ubuntu-installer/amd64
 kernel ${base-url}/linux
 initrd ${base-url}/initrd.gz
 imgargs linux auto=true priority=critical preseed/url=http://192.168.25.3/preseed.cfg interface=enp0s3

@@ -62,6 +62,9 @@ services:
 
 #  one virtual node booting over iPXE
   controllernode:
+    depends_on:
+      - dhcp
+      - web
     image: infrasim/infrasim-compute:3.5.1 
     volumes:
       - "./virtualnode/controllernode.yml:/root/.infrasim/.node_map/default.yml"
@@ -87,6 +90,9 @@ services:
       - /dev/kvm # activate this if you want nested KVM support
 
   computenode1:
+    depends_on:
+      - dhcp
+      - web
     image: infrasim/infrasim-compute:3.5.1 
     volumes:
       - "./virtualnode/compute1node.yml:/root/.infrasim/.node_map/default.yml"
@@ -112,6 +118,9 @@ services:
       - /dev/kvm # activate this if you want nested KVM support
 
   computenode2:
+    depends_on:
+      - dhcp
+      - web
     image: infrasim/infrasim-compute:3.5.1 
     volumes:
       - "./virtualnode/compute2node.yml:/root/.infrasim/.node_map/default.yml"

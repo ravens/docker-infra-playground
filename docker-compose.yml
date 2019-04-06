@@ -82,19 +82,22 @@ services:
     # - "./salt-log:/var/logs/salt"
     # - "./salt-master:/etc/salt/master.d"
     # - "./salt:/srv/salt"
+    volumes:
+      - "./saltmaster/salt:/srv/salt"
+      - "./saltmaster/reactor.conf:/etc/salt/master.d/reactor.conf"
     networks:
       lab:
         ipv4_address: 192.168.25.7
 
-  cloudserver:
-    depends_on:
-      - saltmaster
-    build: ./cloudserver
-    ports:
-      - "3000:3000"
-    networks:
-      lab:
-        ipv4_address: 192.168.25.8
+  # cloudserver:
+  #   depends_on:
+  #     - saltmaster
+  #   build: ./cloudserver
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     lab:
+  #       ipv4_address: 192.168.25.8
 
 #  one virtual node booting over iPXE
   node:

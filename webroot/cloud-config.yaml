@@ -41,3 +41,7 @@ rancher:
            devices:
              - /dev/net/tun
              - /dev/kvm
+        saltproxy:
+           image: 192.168.25.5:5000/saltproxy-service
+           restart: always
+

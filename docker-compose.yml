@@ -76,15 +76,15 @@ services:
     build: ./saltmaster
     ports:
       - "8080:8080"
-    # volumes:
+    volumes:
+      - "./saltmaster/etc-salt-master.d:/etc/salt/master.d"
+      - "./saltmaster/srv-salt:/srv/salt"
+      - "./saltmaster/srv-pillar:/srv/pillar"
     # - "./salt-pki:/etc/salt/pki"
     # - "./salt-cache:/var/cache/salt"
     # - "./salt-log:/var/logs/salt"
     # - "./salt-master:/etc/salt/master.d"
     # - "./salt:/srv/salt"
-    volumes:
-      - "./saltmaster/salt:/srv/salt"
-      - "./saltmaster/reactor.conf:/etc/salt/master.d/reactor.conf"
     networks:
       lab:
         ipv4_address: 192.168.25.7

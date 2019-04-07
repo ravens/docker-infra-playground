@@ -9,9 +9,6 @@ RUN apt-get -qy install salt-api
 
 RUN apt-get -qy install supervisor
 COPY salt-supervisor.conf /root/salt-supervisor.conf
-COPY salt-api.conf /etc/salt/master.d/salt-api.conf
-#VOLUME ['/etc/salt/pki', '/var/cache/salt', '/var/logs/salt', '/etc/salt/master.d', '/srv/salt']
-#COPY reactor.conf /etc/salt/master.d/reactor.conf
 
 EXPOSE 4505 4506 8080
 #ENTRYPOINT ["/usr/bin/salt-master","--log-level=info"]

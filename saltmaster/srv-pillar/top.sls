@@ -1,0 +1,3 @@
+base:
+  'vyosproxy':
+    - vyosproxy-details

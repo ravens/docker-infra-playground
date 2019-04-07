@@ -80,6 +80,7 @@ services:
       - "./saltmaster/etc-salt-master.d:/etc/salt/master.d"
       - "./saltmaster/srv-salt:/srv/salt"
       - "./saltmaster/srv-pillar:/srv/pillar"
+      - "./keys/id_rsa:/tmp/vyos-key.pem"
     # - "./salt-pki:/etc/salt/pki"
     # - "./salt-cache:/var/cache/salt"
     # - "./salt-log:/var/logs/salt"

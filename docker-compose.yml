@@ -89,16 +89,6 @@ services:
       lab:
         ipv4_address: 192.168.25.7
 
-  # cloudserver:
-  #   depends_on:
-  #     - saltmaster
-  #   build: ./cloudserver
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     lab:
-  #       ipv4_address: 192.168.25.8
-
 #  one virtual node booting over iPXE
   node:
     depends_on:

@@ -91,6 +91,15 @@ docker push localhost:5000/saltminion-service
 cd ..
 ```
 
+We need now to prepare the saltproxy container service that will be loaded in the RancherOS at boot. Using again docker-compose:
+```
+cd saltproxy-service
+docker-compose build
+docker tag saltproxy-service_saltproxy-service:latest localhost:5000/saltproxy-service
+docker push localhost:5000/saltproxy-service
+cd ..
+```
+
 We can now run safely the rest of the lab infrastructure and our virtual node :
 ```
 docker-compose up

@@ -59,6 +59,18 @@ services:
       lab:
         ipv4_address: 192.168.25.4
 
+  saltmaster:
+    build: ./saltmaster
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./saltmaster/etc-salt-master.d:/etc/salt/master.d"
+      - "./saltmaster/srv-salt:/srv/salt"
+      - "./saltmaster/srv-pillar:/srv/pillar"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.5
+
 
 #  one virtual node booting over iPXE
   controllernode:
@@ -73,16 +85,16 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.5
-      - DATAPLANE_IP=192.168.26.5
+      - BMC_IP=192.168.25.6
+      - DATAPLANE_IP=192.168.26.6
     ports:
       - "5901:5901"
       - "623:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.5
+        ipv4_address: 192.168.25.6
       dataplane:
-        ipv4_address: 192.168.26.5
+        ipv4_address: 192.168.26.6
     cap_add:
       - NET_ADMIN
     devices:
@@ -101,16 +113,16 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.6
-      - DATAPLANE_IP=192.168.26.6
+      - BMC_IP=192.168.25.7
+      - DATAPLANE_IP=192.168.26.7
     ports:
       - "5902:5901"
       - "624:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.6
+        ipv4_address: 192.168.25.7
       dataplane:
-        ipv4_address: 192.168.26.6
+        ipv4_address: 192.168.26.7
     cap_add:
       - NET_ADMIN
     devices:
@@ -129,16 +141,16 @@ services:
       - /bin/bash
       - /root/run.sh
     environment:
-      - BMC_IP=192.168.25.7
-      - DATAPLANE_IP=192.168.26.7
+      - BMC_IP=192.168.25.8
+      - DATAPLANE_IP=192.168.26.8
     ports:
       - "5903:5901"
       - "625:623/udp"
     networks:
       lab:
-        ipv4_address: 192.168.25.7
+        ipv4_address: 192.168.25.8
       dataplane:
-        ipv4_address: 192.168.26.7
+        ipv4_address: 192.168.26.8
     cap_add:
       - NET_ADMIN
     devices:

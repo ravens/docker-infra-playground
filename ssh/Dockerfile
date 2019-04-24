@@ -13,3 +13,10 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
+
+# Installing ansible for trials
+RUN apt-get -qy install software-properties-common
+RUN add-apt-repository ppa:ansible/ansible
+RUN apt-get -qy update
+RUN apt-get -qy install ansible
+RUN echo "[defaults]\nhost_key_checking = False" > /root/.ansible.cfg 

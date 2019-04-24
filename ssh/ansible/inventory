@@ -1,0 +1,2 @@
+[vyosrouter]
+192.168.25.101 ansible_user=labuser ansible_become=true 

@@ -45,6 +45,7 @@ services:
     volumes:
       - "./keys/id_rsa:/root/.ssh/id_rsa"
       - "./keys/id_rsa.pub:/root/.ssh/id_rsa.pub"
+      - "./ssh/ansible/inventory:/root/inventory"
     networks:
       lab:
         ipv4_address: 192.168.25.4
@@ -81,7 +82,7 @@ services:
       - "./saltmaster/srv-salt:/srv/salt"
       - "./saltmaster/srv-pillar:/srv/pillar"
       - "./keys/id_rsa:/tmp/vyos-key.pem"
-    # - "./salt-pki:/etc/salt/pki"
+    #  - "./saltmaster/etc-salt-pki:/etc/salt/pki"
     # - "./salt-cache:/var/cache/salt"
     # - "./salt-log:/var/logs/salt"
     # - "./salt-master:/etc/salt/master.d"

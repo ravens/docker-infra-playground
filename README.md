@@ -122,5 +122,7 @@ Salt commands we can sue from the GUI (:8080) or from the saltmaster docker:
 salt '*' saltutil.refresh_pillar
 # executing vyos driver command from https://github.com/napalm-automation-community/napalm-vyos/blob/develop/napalm_vyos/vyos.py
 salt 'vyosproxy' napalm.call load_merge_candidate config="set service lldp"
+salt 'vyosproxy' napalm.call compare_config
 salt 'vyosproxy' napalm.call commit_config
+salt 'vyosproxy' napalm.call rollback
 ```

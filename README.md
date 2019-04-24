@@ -113,3 +113,14 @@ ssh localhost -l root -p 2222 # password *labpassword*, as defined in ssh/Docker
 ssh 192.168.25.100 -l rancher # to jump on the rancherOS virtualnode
 ssh 192.168.25.101 -l labuser # to jump on the VyOS router
 ```
+
+### saltstack notes
+
+Salt commands we can sue from the GUI (:8080) or from the saltmaster docker:
+```
+# refresh pillar
+salt '*' saltutil.refresh_pillar
+# executing vyos driver command from https://github.com/napalm-automation-community/napalm-vyos/blob/develop/napalm_vyos/vyos.py
+salt 'vyosproxy' napalm.call load_merge_candidate config="set service lldp"
+salt 'vyosproxy' napalm.call commit_config
+```

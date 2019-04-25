@@ -44,6 +44,7 @@
         "set system login user {{user `user`}} level admin<enter><wait>",
         "set system login user {{user `user`}} authentication public-keys identifier key '{{user `sshpubkey`}}'<enter><wait>",
         "set system login user {{user `user`}} authentication public-keys identifier type ssh-rsa<enter><wait>",
+        "set system name-server 8.8.8.8<enter><wait>",
         "set service ssh<enter><wait>",
         "set service salt-minion master 192.168.25.7<enter><wait>",
         "commit<enter><wait10>",
@@ -69,7 +70,8 @@
     {
       "type":  "shell",
       "inline": [
-        "sudo sed -i '/hw-id/d' /config/config.boot"
+        "sudo sed -i '/hw-id/d' /config/config.boot",
+        "echo 'sudo_user: root\nuser: minion' | sudo    tee /etc/salt/minion.d/sudouser.conf"
         ]
     }]
 }

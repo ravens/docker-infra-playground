@@ -114,6 +114,17 @@ ssh 192.168.25.100 -l rancher # to jump on the rancherOS virtualnode
 ssh 192.168.25.101 -l labuser # to jump on the VyOS router
 ```
 
+### vyos notes
+
+ * Version of Debian used : https://wiki.vyos.net/wiki/Version_history
+ * configuring the package repository :
+ ```
+set system package repository jessie components 'main contrib non-free'
+set system package repository jessie distribution 'jessie'
+set system package repository jessie url 'http://archive.debian.org/debian'
+ ```
+ * we prefer the injection of a debian package file using salt
+
 ### saltstack notes
 
 Salt commands we can sue from the GUI (:8080) or from the saltmaster docker:
@@ -125,14 +136,5 @@ salt 'vyosproxy' napalm.call load_merge_candidate config="set service lldp"
 salt 'vyosproxy' napalm.call compare_config
 salt 'vyosproxy' napalm.call commit_config
 salt 'vyosproxy' napalm.call rollback
+salt-run state.event pretty=True # observe the event stream on the master
 ```
-
-### vyos notes
-
- * Version of Debian used : https://wiki.vyos.net/wiki/Version_history
- * configuring the package repository :
- ```
-set system package repository jessie components 'main contrib non-free'
-set system package repository jessie distribution 'jessie'
-set system package repository jessie url 'http://archive.debian.org/debian'
- ```

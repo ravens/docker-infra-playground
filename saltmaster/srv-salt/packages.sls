@@ -1,8 +1,5 @@
-python-pip:
-  cmd.run:
-    - name: sudo apt-get update && sudo apt-get -qy install python-pip
-
-pyinotify:
-  pip.installed:
-    - require:
-      - pkg: python-pip
+debianrepo:
+  pkgrepo.managed:
+    - humanname: debian jessie
+    - name: deb http://archive.debian.org/debian jessie main contrib non-free
+    - file: /etc/apt/sources.list.d/debian.list

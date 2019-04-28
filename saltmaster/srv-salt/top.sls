@@ -1,4 +1,3 @@
 base:
   'vyos':
     - packages
-    - beacons

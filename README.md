@@ -126,3 +126,13 @@ salt 'vyosproxy' napalm.call compare_config
 salt 'vyosproxy' napalm.call commit_config
 salt 'vyosproxy' napalm.call rollback
 ```
+
+### vyos notes
+
+ * Version of Debian used : https://wiki.vyos.net/wiki/Version_history
+ * configuring the package repository :
+ ```
+set system package repository jessie components 'main contrib non-free'
+set system package repository jessie distribution 'jessie'
+set system package repository jessie url 'http://archive.debian.org/debian'
+ ```

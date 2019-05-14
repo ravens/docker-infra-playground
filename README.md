@@ -73,7 +73,9 @@ Time to build the vyos image. For this we use packer and docker-compose :
 ```
 cd vyos-vm-service
 # in case packer is needed : wget https://releases.hashicorp.com/packer/1.3.5/packer_1.3.5_linux_amd64.zip && 
-packer build -var-file=vyos-var.json vyos-image.json
+sudo apt install python-bs4 # dependencies from our python script to pull the latest version
+python vyos_iso_download.py # this will generate the updated packer command line to build the latest VyOS rolling release
+packer build -var-file=vyos-var.json -var 'iso_url=https://downloads.vyos.io/rolling/current/amd64/vyos-1.2.0-rolling%2B201905140337-amd64.iso' -var 'iso_checksum=ab014e46588028a021c9adcfb48a32d94dce7f49' vyos.qcow2.json
 docker-compose build
 docker tag vyos-vm-service_vyos-vm-service:latest localhost:5000/vyos-vm-service
 docker push localhost:5000/vyos-vm-service

@@ -81,12 +81,16 @@ node_1  | 2019-03-14 12:58:22,421 - Model - model.py:1620 - INFO - [ 47     ] de
 node_1  | 2019-03-14 12:58:23,423 - Qemu - qemu.py:151 - INFO - qemu stopped
 ```
 
+## examples of lab 
+
+I am adding other docker-compose to reflect various tested :
+ * [docker-compose -f docker-compose-centos.yml up](./docker-compose-centos.yml) is building a lab with one node booting and kickstarting a CentOS node.
+
 ## examples
 
 I am adding branches on that repository with example of testbed :
  * [rancherOS+k3s](https://github.com/ravens/docker-infra-playground/tree/rancheros) quick and dirty 3 nodes cluster for k3s, the lightweight kubernetes from Rancher
  * [rancherOS+rancherUI+rancher-agent](https://github.com/ravens/docker-infra-playground/tree/rancheros-rancher) 3 nodes cluster for the Kubernetes managed by Rancher UI
  * [ubuntu](https://github.com/ravens/docker-infra-playground/tree/ubuntu) a simple one node automated install of ubuntu 18.04
- * [centos](https://github.com/ravens/docker-infra-playground/tree/centos) a simple one node automated install of centos 7
  * [rancherOS+VyOS](https://github.com/ravens/docker-infra-playground/tree/rancheros-vcpe) a one node with a VyOS VM running from RancherOS
  * [kolla](https://github.com/ravens/docker-infra-playground/tree/kolla) a 3 nodes with the goal to auto deploy Openstack Kolla on a controller with 2 computes nodes

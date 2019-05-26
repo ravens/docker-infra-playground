@@ -1,0 +1,19 @@
+#!ipxe
+
+# This script is called once the iPXE engine is loaded on the virtual node. With Infrasim, the node is by default running iPXE. On a physical node, you would probably use legacy PXE to boot an iPXE client to be able to boot over iSCSI, HTTP etc.
+
+dhcp
+
+# CentOS - full reference here : https://github.com/antonym/netboot.xyz/blob/master/src/centos.ipxe
+set centos_mirror mirror.centos.org
+set centos_base_dir centos
+set osversion 7
+set dir ${centos_base_dir}/${osversion}/os/x86_64
+set repo http://${centos_mirror}/${dir}
+set ksurl http://192.168.25.3/kickstart.cfg
+set params ks=${ksurl}
+
+imgfree
+kernel http://${centos_mirror}/${dir}/images/pxeboot/vmlinuz repo=${repo} ${params} ip=dhcp initrd=initrd.img
+initrd http://${centos_mirror}/${dir}/images/pxeboot/initrd.img
+boot

@@ -92,6 +92,5 @@ I am adding other docker-compose to reflect various tested :
 I am adding branches on that repository with example of testbed :
  * [rancherOS+k3s](https://github.com/ravens/docker-infra-playground/tree/rancheros) quick and dirty 3 nodes cluster for k3s, the lightweight kubernetes from Rancher
  * [rancherOS+rancherUI+rancher-agent](https://github.com/ravens/docker-infra-playground/tree/rancheros-rancher) 3 nodes cluster for the Kubernetes managed by Rancher UI
- * [ubuntu](https://github.com/ravens/docker-infra-playground/tree/ubuntu) a simple one node automated install of ubuntu 18.04
- * [rancherOS+VyOS](https://github.com/ravens/docker-infra-playground/tree/rancheros-vcpe) a one node with a VyOS VM running from RancherOS
+  * [rancherOS+VyOS](https://github.com/ravens/docker-infra-playground/tree/rancheros-vcpe) a one node with a VyOS VM running from RancherOS
  * [kolla](https://github.com/ravens/docker-infra-playground/tree/kolla) a 3 nodes with the goal to auto deploy Openstack Kolla on a controller with 2 computes nodes

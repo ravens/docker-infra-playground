@@ -85,6 +85,7 @@ node_1  | 2019-03-14 12:58:23,423 - Qemu - qemu.py:151 - INFO - qemu stopped
 
 I am adding other docker-compose to reflect various tested :
  * [docker-compose -f docker-compose-centos.yml up](./docker-compose-centos.yml) is building a lab with one node booting and kickstarting a CentOS node.
+ * [docker-compose -f docker-compose-ubuntu.yml up](./docker-compose-ubuntu.yml) is building a lab with one node booting and preseeding a Ubuntu 18.04 node.
 
 ## examples
 

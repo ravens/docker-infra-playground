@@ -1,0 +1,63 @@
+version: '3'
+
+
+networks:
+
+# a basic lab network where we have a DHCP + PXE running to auto provision things
+
+  lab:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.25.0/24
+
+services:
+
+
+# DHCP server to serve IP + PXE TFTP server
+  dhcp:
+    build: ./dhcp
+    volumes:
+     - "./dhcp/dnsmasq-ubuntu.conf:/root/dnsmasq.conf"
+     - "./tftproot:/root/tftproot"
+    cap_add:
+     - NET_ADMIN
+    networks:
+      lab:
+        ipv4_address: 192.168.25.2
+
+# HTTP serve to serve the image
+  web:
+    image: httpd:2.4 
+    volumes:
+      - "./webroot:/usr/local/apache2/htdocs/"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.3
+
+
+#  one virtual node booting over iPXE
+  node:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-ubuntu.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-ubuntu.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.4
+    ports:
+      - "5901:5901"
+      - "623:623/udp"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.4
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+   

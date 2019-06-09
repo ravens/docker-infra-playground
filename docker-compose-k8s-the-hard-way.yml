@@ -1,0 +1,184 @@
+version: '3'
+
+
+networks:
+
+# a basic lab network where we have a DHCP + PXE running to auto provision things, then we bootstrap a Kubernetes cluster using 
+# Keysey Hightower Kubernetes the Hard Way : https://github.com/kelseyhightower/kubernetes-the-hard-way/
+
+  lab:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.25.0/24
+
+services:
+
+
+# DHCP server to serve IP + PXE TFTP server
+  dhcp:
+    build: ./dhcp
+    volumes:
+     - "./dhcp/dnsmasq-k8s-the-hard-way.conf:/root/dnsmasq.conf"
+     - "./tftproot:/root/tftproot"
+    cap_add:
+     - NET_ADMIN
+    networks:
+      lab:
+        ipv4_address: 192.168.25.2
+
+# HTTP serve to serve the image
+  web:
+    image: httpd:2.4 
+    volumes:
+      - "./webroot:/usr/local/apache2/htdocs/"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.3
+
+# several nods here, 3 controllers, 3 computes
+  k8sctrlnode1:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-k8s-the-hard-way-node1.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-k8s-the-hard-way.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.4
+    ports:
+      - "5901:5901"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.4
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+  
+  k8sctrlnode2:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-k8s-the-hard-way-node2.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-k8s-the-hard-way.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.5
+    ports:
+      - "5902:5901"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.5
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+   
+  k8sctrlnode3:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-k8s-the-hard-way-node3.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-k8s-the-hard-way.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.6
+    ports:
+      - "5903:5901"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.6
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+
+  k8swrknode1:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-k8s-the-hard-way-node4.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-k8s-the-hard-way.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.7
+    ports:
+      - "5904:5901"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.7
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+
+  k8swrknode2:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-k8s-the-hard-way-node5.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-k8s-the-hard-way.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.8
+    ports:
+      - "5905:5901"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.8
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+
+  k8swrknode3:
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default-k8s-the-hard-way-node6.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run-k8s-the-hard-way.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.9
+    ports:
+      - "5906:5901"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.9
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm # activate this if you want nested KVM support
+
+  saltmaster:
+    build: ./services/saltmaster
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./services/saltmaster/master:/etc/salt/master"
+      - "./services/saltmaster/etc-salt-master.d:/etc/salt/master.d"
+      - "./services/saltmaster/srv-salt:/srv/salt"
+      - "./services/saltmaster/srv-pillar:/srv/pillar"
+    #  - "./saltmaster/etc-salt-pki:/etc/salt/pki"
+    # - "./salt-cache:/var/cache/salt"
+    # - "./salt-log:/var/logs/salt"
+    # - "./salt-master:/etc/salt/master.d"
+    # - "./salt:/srv/salt"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.10

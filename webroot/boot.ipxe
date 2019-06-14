@@ -2,12 +2,24 @@
 
 # Boot a persistent RancherOS to RAM
 
+iseq ${net0/mac} 54:ab:3a:da:81:36 && goto airframemachines || 
+
+
 # Location of Kernel/Initrd images
 #set base-url http://releases.rancher.com/os/latest
 set base-url http://192.168.25.3
 set provision-url http://192.168.25.3
-set cloud-config cloud-config.bootstrap.yaml
 
+iseq ${net0/mac} 84:39:be:74:65:25 && goto physical || 
+:vm
+set cloud-config cloud-config.bootstrap.yaml
+goto lab
+
+:physical
+set cloud-config cloud-config.bootstrap.physical.yaml
+goto lab
+
+:lab
 kernel ${base-url}/vmlinuz rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
 initrd ${base-url}/initrd
 boot

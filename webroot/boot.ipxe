@@ -17,7 +17,7 @@ set cloud-config cloud-config.bootstrap.physical.yaml
 goto lab
 
 :lab
-kernel ${base-url}/vmlinuz rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
+kernel ${base-url}/vmlinuz printk.devkmsg=on rancher.state.dev=LABEL=RANCHER_STATE rancher.state.wait panic=10 rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
 initrd ${base-url}/initrd
 boot
 

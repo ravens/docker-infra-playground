@@ -21,7 +21,7 @@ goto lab
 
 :lab
 kernel ${base-url}/vmlinuz rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
-initrd ${base-url}/initrd
+initrd ${base-url}/initrd 
 boot
 
 

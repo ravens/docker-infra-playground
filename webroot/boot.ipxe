@@ -2,9 +2,6 @@
 
 # Boot a persistent RancherOS to RAM
 
-iseq ${net0/mac} 54:ab:3a:da:81:36 && goto airframemachines || 
-
-
 # Location of Kernel/Initrd images
 #set base-url http://releases.rancher.com/os/latest
 set base-url http://192.168.25.3
@@ -21,7 +18,7 @@ goto lab
 
 :lab
 kernel ${base-url}/vmlinuz rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
-initrd ${base-url}/initrd 
+initrd ${base-url}/initrd
 boot
 
 

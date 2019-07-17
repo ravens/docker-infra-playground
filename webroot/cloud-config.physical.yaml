@@ -8,16 +8,16 @@ write_files:
     content: |
       #!/bin/bash
       source /opt/vyatta/etc/functions/script-template
-      mkdir -p /var/log/vyatta/
-      touch /var/log/vyatta/vyatta-config-loader.log
-      touch /var/log/vyatta/vyatta-commit.log
-      chown ugo+rwX /var/log/vyatta/
-      chgrp -R vyattacfg /var/log/vyatta/
-      source /etc/default/vyatta-cfg
-      export > /var/log/vyatta/variables
-      sg vyattacfg -c  "/opt/vyatta/sbin/vyatta-boot-config-loader /config.init" 
+      session_env=$(/bin/cli-shell-api getSessionEnv $PPID)
+      # Evaluate environment string
+      eval $session_env 
+      /bin/cli-shell-api setupSession
+      /bin/cli-shell-api loadFile /config.init
+      /opt/vyatta/sbin/my_commit
+      ${vyatta_sbindir}/vyatta-save-config.pl
+      /bin/cli-shell-api teardownSession
   - path: /mnt/vyos-config.init
-    permissions: "0777"
+    permissions: "0777"#
     owner: root
     content: |
       interfaces {

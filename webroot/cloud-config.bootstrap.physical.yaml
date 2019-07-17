@@ -19,7 +19,7 @@ write_files:
       mkdir -p /mnt/rancherosiso
       losetup /dev/loop0 /tmp/rancheros.iso
       mount /dev/loop0 /mnt/rancherosiso
-      ros install -f -c /mnt/rancher-os.yaml -d /dev/mmcblk0
+      ros install -f -c /mnt/rancher-os.yaml -d /dev/sda
       reboot
 runcmd:
 - sudo /mnt/runme.sh

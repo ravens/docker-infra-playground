@@ -7,7 +7,7 @@
 set base-url http://192.168.25.3
 set provision-url http://192.168.25.3
 
-iseq ${net0/mac} 84:39:be:74:65:25 && goto physical || 
+iseq ${net0/mac} e4:3a:6e:20:3b:1c && goto physical || 
 :vm
 set cloud-config cloud-config.bootstrap.yaml
 goto lab

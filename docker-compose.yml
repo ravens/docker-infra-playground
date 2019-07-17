@@ -119,6 +119,5 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun
-      - /dev/kvm # activate this if you want nested KVM support
-   
+
  

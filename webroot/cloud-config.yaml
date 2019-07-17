@@ -17,6 +17,10 @@ rancher:
         dhcp: true
       eth0:
         bridge: br0
+      br1:
+        address: 169.254.253.1/24
+        bridge: true
+        dhcp: false
   resize_device: /dev/sda
   services:
         saltminion:
@@ -32,16 +36,15 @@ rancher:
           ipc: host
           net: host
           uts: host
-        vyosrouter:
-           image: 192.168.25.5:5000/vyos-vm-service
+        vyos:
+           image: 192.168.25.5:5000/vyos-service
            restart: always
            net: host
+           privileged: true
+           volumes:
+             - /lib/modules:/lib/modules
            cap_add:
              - NET_ADMIN
            devices:
              - /dev/net/tun
-             - /dev/kvm
-        saltproxy:
-           image: 192.168.25.5:5000/saltproxy-service
-           restart: always
 

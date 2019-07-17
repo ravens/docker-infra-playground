@@ -71,13 +71,18 @@ This will make a registry available on port 5000 and its web interface for debug
 
 Time to build the vyos image. For this we use packer and docker-compose :
 ```
-cd vyos-vm-service
-# in case packer is needed : wget https://releases.hashicorp.com/packer/1.3.5/packer_1.3.5_linux_amd64.zip && 
-packer build -var-file=vyos-var.json vyos.qcow2.json
+cd vyos-service
+sudo apt-get install -y squashfs-tools python-bs4 
+curl --output vyos-latest.iso `python vyos-latest.py`
+mkdir unsquashfs
+mkdir rootfs
+sudo mount -o loop vyos-latest.iso rootfs
+sudo unsquashfs -f -d unsquashfs/ rootfs/live/filesystem.squashfs
+sudo tar -C unsquashfs -c . | docker import - vyos
+sudo umount rootfs
 docker-compose build
-docker tag vyos-vm-service_vyos-vm-service:latest localhost:5000/vyos-vm-service
-docker push localhost:5000/vyos-vm-service
-cd ..
+docker tag vyos-service_vyos-service:latest localhost:5000/vyos-service
+docker push localhost:5000/vyos-service
 ```
 
 This will generate the vyos.img in the vyos-nfv/build directory, that we will need for the yos-vm-service container image, and ship the resulting container in the lab registry. 

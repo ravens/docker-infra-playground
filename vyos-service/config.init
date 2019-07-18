@@ -4,11 +4,6 @@ interfaces {
         smp-affinity auto
         speed auto
     }
-    ethernet eth1 {
-        duplex auto
-        smp-affinity auto
-        speed auto
-    }
     loopback lo
 }
 service {

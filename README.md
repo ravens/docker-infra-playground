@@ -81,7 +81,7 @@ sudo unsquashfs -f -d unsquashfs/ rootfs/live/filesystem.squashfs
 sudo tar -C unsquashfs -c . | docker import - vyos
 sudo umount rootfs
 sudo rm -Rf rootfs/ unsquashfs/
-docker-compose build
+docker-compose build --no-cache
 docker tag vyos-service_vyos-service:latest localhost:5000/vyos-service
 docker push localhost:5000/vyos-service
 ```

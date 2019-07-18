@@ -2,25 +2,23 @@
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
 write_files:
-  - path: /mnt/vyos-config.sh
+  - path: /mnt/minion_id
     permissions: "0777"
     owner: root
     content: |
-      #!/bin/bash
-      sleep 10 
-      mkdir -p /var/log/vyatta/
-      touch /var/log/vyatta/vyatta-config-loader.log
-      touch /var/log/vyatta/vyatta-commit.log
-      chown ugo+rwX /var/log/vyatta/
-      chgrp -R vyattacfg /var/log/vyatta/
-      source /opt/vyatta/etc/functions/script-template
-      sg vyattacfg -c  "/opt/vyatta/sbin/vyatta-boot-config-loader /config.init" 
+      sdwanrouter
   - path: /mnt/vyos-config.init
     permissions: "0777"
     owner: root
     content: |
       interfaces {
           ethernet eth0 {
+              duplex auto
+              smp-affinity auto
+              speed auto
+          }
+          ethernet eth1 {
+              address 192.168.1.1/24
               duplex auto
               smp-affinity auto
               speed auto
@@ -35,7 +33,11 @@ write_files:
               }
           }
           ssh {
-              port 22222
+              port 22
+          }
+          salt-minion {
+               master 192.168.25.7
+               user root
           }
       }
       system {
@@ -80,6 +82,9 @@ rancher:
     registry_mirror: "http://192.168.25.5:5000"
     insecure_registry:
       - "192.168.25.0/24"
+  ssh:
+    port: 10022
+    listen_address: 169.254.253.1
   network:
     interfaces:
       br0:
@@ -93,7 +98,19 @@ rancher:
         dhcp: false
   resize_device: /dev/sda
   services:
-        saltminion:
+    vyos:
+       image: 192.168.25.5:5000/vyos-service
+       restart: always
+       privileged: true
+       net: host
+       volumes:
+         - /lib/modules:/lib/modules
+         - /mnt/vyos-config.init:/config.init
+       cap_add:
+         - NET_ADMIN
+       devices:
+         - /dev/net/tun
+    saltminion:
           image: 192.168.25.5:5000/saltminion-service
           privileged: true
           labels:
@@ -101,26 +118,10 @@ rancher:
             io.rancher.os.after: console
           volumes_from:
               - all-volumes
+          volumes: 
+              - /mnt/minion_id:/etc/salt/minion_id
           restart: always
           pid: host
           ipc: host
           net: host
           uts: host
-        vyos:
-           image: 192.168.25.5:5000/vyos-service
-           restart: always
-           privileged: true
-           entrypoint: /sbin/init
-           pid: host
-           net: host
-           volumes:
-             - /lib/modules:/lib/modules
-             - /mnt/vyos-config.init:/config.init
-             - /mnt/vyos-config.sh:/usr/libexec/vyos/init/vyos-config
-             - /mnt/vyos-logs:/var/log/vyatta
-             - /mnt/vyos-config:/opt/vyatta/etc/config
-           cap_add:
-             - NET_ADMIN
-           devices:
-             - /dev/net/tun
-

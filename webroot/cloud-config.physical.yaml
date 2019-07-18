@@ -7,17 +7,16 @@ write_files:
     owner: root
     content: |
       #!/bin/bash
+      sleep 10 
+      mkdir -p /var/log/vyatta/
+      touch /var/log/vyatta/vyatta-config-loader.log
+      touch /var/log/vyatta/vyatta-commit.log
+      chown ugo+rwX /var/log/vyatta/
+      chgrp -R vyattacfg /var/log/vyatta/
       source /opt/vyatta/etc/functions/script-template
-      session_env=$(/bin/cli-shell-api getSessionEnv $PPID)
-      # Evaluate environment string
-      eval $session_env 
-      /bin/cli-shell-api setupSession
-      /bin/cli-shell-api loadFile /config.init
-      /opt/vyatta/sbin/my_commit
-      ${vyatta_sbindir}/vyatta-save-config.pl
-      /bin/cli-shell-api teardownSession
+      sg vyattacfg -c  "/opt/vyatta/sbin/vyatta-boot-config-loader /config.init" 
   - path: /mnt/vyos-config.init
-    permissions: "0777"#
+    permissions: "0777"
     owner: root
     content: |
       interfaces {
@@ -112,13 +111,14 @@ rancher:
            restart: always
            privileged: true
            entrypoint: /sbin/init
+           pid: host
            net: host
            volumes:
              - /lib/modules:/lib/modules
              - /mnt/vyos-config.init:/config.init
              - /mnt/vyos-config.sh:/usr/libexec/vyos/init/vyos-config
              - /mnt/vyos-logs:/var/log/vyatta
-             - /mnt/vyos-config:/opt/vyatta/etc/config"
+             - /mnt/vyos-config:/opt/vyatta/etc/config
            cap_add:
              - NET_ADMIN
            devices:

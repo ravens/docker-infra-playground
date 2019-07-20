@@ -80,29 +80,30 @@ services:
         ipv4_address: 192.168.25.7
 
 #  one virtual node booting over iPXE
-  # node:
-  #   depends_on:
-  #     - dhcp
-  #     - web
-  #     - registry
-  #   image: infrasim/infrasim-compute:3.5.1 
-  #   volumes:
-  #     - "./virtualnode/default.yml:/root/.infrasim/.node_map/default.yml"
-  #     - "./virtualnode/run.sh:/root/run.sh"
-  #   entrypoint:
-  #     - /bin/bash
-  #     - /root/run.sh
-  #   environment:
-  #     - BMC_IP=192.168.25.9
-  #   ports:
-  #     - "5901:5901"
-  #     - "623:623/udp"
-  #   networks:
-  #     lab:
-  #       ipv4_address: 192.168.25.9
-  #   cap_add:
-  #     - NET_ADMIN
-  #   devices:
-  #     - /dev/net/tun
+  node:
+    depends_on:
+      - dhcp
+      - web
+      - registry
+    image: infrasim/infrasim-compute:3.5.1 
+    volumes:
+      - "./virtualnode/default.yml:/root/.infrasim/.node_map/default.yml"
+      - "./virtualnode/run.sh:/root/run.sh"
+    entrypoint:
+      - /bin/bash
+      - /root/run.sh
+    environment:
+      - BMC_IP=192.168.25.9
+    ports:
+      - "5901:5901"
+      - "623:623/udp"
+    networks:
+      lab:
+        ipv4_address: 192.168.25.9
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm
 
  

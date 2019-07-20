@@ -1,6 +1,72 @@
 #cloud-config
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoU0v9TRULgk/fOzoKgmkYmFVbfXfAvAAQgmCzzESU0q2w82hFCaNlImTVB76d38SJOoR+UA4HtpD6FNBdKYwF0H8hkGI5uxcWmBmzL2ohnxf3oXF7/uOix4Mjl8od7abatGWKJAYx7Zib+9w9ZLS4ukXleNyUVa9N1dv+4yVyno9wQSMrw8h0oeius86lph/LnJ1KkWAQKLRj3xd6jMY1Hb3o2j4j5q4xiIzIBceRRTKaMrjjPGQfJtSN0CFA+ie/6WU4WtVtz9RSBcpZ4heZhe7BMRNbgccMf/JsJn2s8OCSNb+UtqB19pb0lcVUqYGHxSCRr3Aoty8TlE8/u/c7 yan@falcon
+write_files:
+  - path: /mnt/minion_id
+    permissions: "0777"
+    owner: root
+    content: |
+      sdwanrouter
+  - path: /mnt/vyos-config.init
+    permissions: "0777"
+    owner: root
+    content: |
+      interfaces {
+          ethernet eth0 {
+              duplex auto
+              smp-affinity auto
+              speed auto
+          }
+          loopback lo
+      }
+      service {
+          dns {
+              forwarding {
+                  listen-address 0.0.0.0
+                  system
+              }
+          }
+          ssh {
+              port 22222
+          }
+          salt-minion {
+               master 192.168.25.7
+               user root
+          }
+      }
+      system {
+          config-management {
+              commit-revisions 100
+          }
+          login {
+              user vyos {
+                  authentication {
+                      plaintext-password "vyos"
+                  }
+                  level admin
+              }
+          }
+          name-server 8.8.8.8
+          ntp {
+              server 0.pool.ntp.org
+              server 1.pool.ntp.org
+              server 2.pool.ntp.org
+          }
+          syslog {
+              global {
+                  facility all {
+                      level info
+                  }
+                  facility protocols {
+                      level debug
+                  }
+              }
+          }
+          time-zone Europe/Madrid
+      }
+      /* Warning: Do not remove the following line. */
+      /* === vyatta-config-version: "broadcast-relay@1:cluster@1:config-management@1:conntrack@1:conntrack-sync@1:dhcp-relay@2:dhcp-server@5:firewall@5:ipsec@5:l2tp@1:mdns@1:nat@4:ntp@1:pptp@1:qos@1:quagga@3:ssh@1:system@9:vrrp@2:vyos-accel-ppp@1:wanloadbalance@3:webgui@1:webproxy@1:zone-policy@1" === */
+      /* Release version: 1.2.0 */
 rancher:
   docker:
     registry_mirror: "http://192.168.25.5:5000"
@@ -10,6 +76,9 @@ rancher:
     registry_mirror: "http://192.168.25.5:5000"
     insecure_registry:
       - "192.168.25.0/24"
+  # ssh:
+  #   port: 10022
+  #   listen_address: 169.254.253.1
   network:
     interfaces:
       br0:
@@ -23,7 +92,19 @@ rancher:
         dhcp: false
   resize_device: /dev/sda
   services:
-        saltminion:
+    vyos:
+       image: 192.168.25.5:5000/vyos-service
+       restart: always
+       privileged: true
+       net: host
+       volumes:
+         - /lib/modules:/lib/modules
+         - /mnt/vyos-config.init:/config.init
+       cap_add:
+         - NET_ADMIN
+       devices:
+         - /dev/net/tun
+    saltminion:
           image: 192.168.25.5:5000/saltminion-service
           privileged: true
           labels:
@@ -31,20 +112,10 @@ rancher:
             io.rancher.os.after: console
           volumes_from:
               - all-volumes
+          volumes: 
+              - /mnt/minion_id:/etc/salt/minion_id
           restart: always
           pid: host
           ipc: host
           net: host
           uts: host
-        vyos:
-           image: 192.168.25.5:5000/vyos-service
-           restart: always
-           net: host
-           privileged: true
-           volumes:
-             - /lib/modules:/lib/modules
-           cap_add:
-             - NET_ADMIN
-           devices:
-             - /dev/net/tun
-

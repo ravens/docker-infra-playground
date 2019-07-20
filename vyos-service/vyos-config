@@ -1,5 +1,5 @@
 #!/bin/bash
-sleep 10 
+sleep 10
 mkdir -p /var/log/vyatta/
 touch /var/log/vyatta/vyatta-config-loader.log
 touch /var/log/vyatta/vyatta-commit.log

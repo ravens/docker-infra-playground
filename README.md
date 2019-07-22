@@ -55,7 +55,7 @@ In this branch we explore [RancherOS](https://github.com/rancher/os) as a suppor
 We need to fetch RancherOS files to be able to boot locally:
 ```
 cd webroot
-wget https://releases.rancher.com/os/latest/rancheros.iso # ISO to be installed on the virtual disk
+wget https://releases.rancher.com/os/latest/4glte/rancheros.iso # ISO to be installed on the virtual disk
 wget https://releases.rancher.com/os/latest/vmlinuz # Kernel image to be booted on via PXE
 wget https://releases.rancher.com/os/latest/initrd # Ramdisk to be booted on via PXE
 cd ..

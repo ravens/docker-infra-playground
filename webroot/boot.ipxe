@@ -8,6 +8,8 @@ set base-url http://192.168.25.3
 set provision-url http://192.168.25.3
 
 iseq ${net0/mac} e4:3a:6e:20:3b:1c && goto physical || 
+iseq ${net0/mac} 00:90:0b:5e:c5:87 && goto lanner || 
+
 :vm
 set cloud-config cloud-config.bootstrap.yaml
 goto lab
@@ -16,8 +18,13 @@ goto lab
 set cloud-config cloud-config.bootstrap.physical.yaml
 goto lab
 
+:lanner
+set cloud-config cloud-config.bootstrap.lanner.yaml
+set kernel_options console=ttyS0,115200 
+goto lab
+
 :lab
-kernel ${base-url}/vmlinuz printk.devkmsg=on rancher.state.dev=LABEL=RANCHER_STATE rancher.state.wait panic=10 rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] 
+kernel ${base-url}/vmlinuz printk.devkmsg=on rancher.state.dev=LABEL=RANCHER_STATE rancher.state.wait panic=10 rancher.cloud_init.datasources=[url:${provision-url}/${cloud-config}] ${kernel_options}
 initrd ${base-url}/initrd
 boot
 

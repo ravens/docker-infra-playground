@@ -6,7 +6,7 @@ write_files:
     permissions: "0777"
     owner: root
     content: |
-      sdwanrouter
+      lannerrouter
   - path: /mnt/vyos-config.init
     permissions: "0777"
     owner: root
@@ -121,10 +121,6 @@ write_files:
           ssh {
               port 22222
           }
-          salt-minion {
-               master 192.168.25.7
-               user root
-          }
       }
       system {
           config-management {
@@ -189,22 +185,23 @@ rancher:
        volumes:
          - /lib/modules:/lib/modules
          - /mnt/vyos-config.init:/config.init
+         - /mnt/vyos-config:/config
        cap_add:
          - NET_ADMIN
        devices:
          - /dev/net/tun
     saltminion:
-          image: 192.168.25.5:5000/saltminion-service
-          privileged: true
-          labels:
-            io.rancher.os.scope: system
-            io.rancher.os.after: console
-          volumes_from:
-              - all-volumes
-          volumes: 
-              - /mnt/minion_id:/etc/salt/minion_id
-          restart: always
-          pid: host
-          ipc: host
-          net: host
-          uts: host
+        image: 192.168.25.5:5000/saltminion-service
+        privileged: true
+        labels:
+          io.rancher.os.scope: system
+          io.rancher.os.after: console
+        volumes_from:
+            - all-volumes
+        volumes: 
+            - /mnt/minion_id:/etc/salt/minion_id
+        restart: always
+        pid: host
+        ipc: host
+        net: host
+        uts: host

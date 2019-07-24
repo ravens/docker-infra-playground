@@ -14,7 +14,6 @@ service {
         }
     }
     ssh {
-	port 22222
     }
 }
 system {

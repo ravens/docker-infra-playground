@@ -33,7 +33,7 @@ write_files:
               }
           }
           ssh {
-              port 22
+              port 22222
           }
           salt-minion {
                master 192.168.25.7
@@ -83,8 +83,8 @@ rancher:
     insecure_registry:
       - "192.168.25.0/24"
   ssh:
-    port: 10022
-    listen_address: 169.254.253.1
+    port: 22
+    #listen_address: 169.254.253.1
   network:
     interfaces:
       br0:

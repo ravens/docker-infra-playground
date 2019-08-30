@@ -59,13 +59,13 @@ docker-compose pull && docker-compose build && docker-compose up
 First let's verify that all 3 nodes are up and running (using SSH/VNC). Once this is ready, we can log in in our ssh service and start Kolla deployment as noted in their documentation :
 
 ```
-ansible -m ping -i /inventory/lab all # check if all the baremetals/VM are ready
+ansible -m ping -i /inventory/multinode all # check if all the baremetals/VM are ready
 kolla-genpwd
-kolla-ansible -i /inventory/lab bootstrap-servers
-kolla-ansible -i /inventory/lab prechecks
-kolla-ansible -i /inventory/lab deploy
-kolla-ansible -i /inventory/lab post-deploy
-kolla-ansible -i /inventory/lab check
+kolla-ansible -i /inventory/multinode bootstrap-servers
+kolla-ansible -i /inventory/multinode prechecks
+kolla-ansible -i /inventory/multinode deploy
+kolla-ansible -i /inventory/multinode post-deploy
+kolla-ansible -i /inventory/multinode check
 source /etc/kolla/admin-openrc.sh
 # create public network
 openstack network create --external --provider-physical-network physnet1 --provider-network-type flat public1
@@ -82,9 +82,4 @@ openstack user create --project lab --password labpassword labuser
 openstack role add --user labuser --project lab admin
 ```
 
-Most kolla parameters are driven by the files in [ssh/kolla](./ssh/kolla), using Ansible inventory that I preconfigured for this playground [ssh/inventory](./ssh/inventory/lab).
-
-The web interface will be accessible on the 192.168.25.68/24 network. We can use an ssh forward to get to it :
-```
-ssh root@localhost -p 2222 -L 18080:192.168.25.68:80 # labpassword as in ssh/Dockerfile
-```
+Most kolla parameters are driven by the files in [provisioner/kolla](./provisioner/kolla), using Ansible inventory that I preconfigured for this playground [provisioner/inventory](./provisioner/inventory/lab).

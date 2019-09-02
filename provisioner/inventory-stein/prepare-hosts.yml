@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: remove hosts file line
+      lineinfile: dest=/etc/hosts
+              state=absent 
+              regexp='^127.0.1.1' 

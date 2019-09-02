@@ -54,18 +54,37 @@ We use images stored on Docker Hub, although we are building a small image for d
 ```
 docker-compose pull && docker-compose build && docker-compose up
 ```
+
+The easiest way to monitor deployment on the simulated baremetals server is to watch the activity on the web server:
+```
+web_1             | 192.168.25.102 - - [02/Sep/2019:08:15:07 +0000] "GET /boot-kolla.ipxe HTTP/1.1" 200 553
+web_1             | 192.168.25.100 - - [02/Sep/2019:08:15:07 +0000] "GET /boot-kolla.ipxe HTTP/1.1" 200 553
+web_1             | 192.168.25.101 - - [02/Sep/2019:08:15:07 +0000] "GET /boot-kolla.ipxe HTTP/1.1" 200 553
+web_1             | 192.168.25.100 - - [02/Sep/2019:08:15:37 +0000] "GET /preseed-kolla.cfg HTTP/1.1" 200 3193
+web_1             | 192.168.25.101 - - [02/Sep/2019:08:15:38 +0000] "GET /preseed-kolla.cfg HTTP/1.1" 200 3193
+web_1             | 192.168.25.102 - - [02/Sep/2019:08:15:38 +0000] "GET /preseed-kolla.cfg HTTP/1.1" 200 3193
+web_1             | 192.168.25.101 - - [02/Sep/2019:08:57:15 +0000] "GET /postinst-kolla.sh HTTP/1.1" 200 146
+web_1             | 192.168.25.101 - - [02/Sep/2019:08:57:16 +0000] "GET /ok HTTP/1.1" 200 3
+web_1             | 192.168.25.100 - - [02/Sep/2019:08:58:31 +0000] "GET /postinst-kolla.sh HTTP/1.1" 200 146
+web_1             | 192.168.25.100 - - [02/Sep/2019:08:58:32 +0000] "GET /ok HTTP/1.1" 200 3
+web_1             | 192.168.25.102 - - [02/Sep/2019:09:00:24 +0000] "GET /postinst-kolla.sh HTTP/1.1" 200 146
+web_1             | 192.168.25.102 - - [02/Sep/2019:09:00:24 +0000] "GET /ok HTTP/1.1" 200 3
+```
+
+We can watch over the ipxe script to be served, the preseed file to be served to the ubuntu installer, as well as a final empty "ok" file getting fetched at the very end of the installation. It also gives you a timing of the install on a i7 with 16GB of memory (roughly, 30s to get ubuntu to fetch the preseed stage, and 45 min to the full parallel 3 nodes install).
+
 ## installing openstack using Kolla based deployment
 
 First let's verify that all 3 nodes are up and running (using SSH/VNC). Once this is ready, we can log in in our ssh service and start Kolla deployment as noted in their documentation :
 
 ```
-ansible -m ping -i /inventory/lab all # check if all the baremetals/VM are ready
+ansible -m ping -i /inventory/multinode all # check if all the baremetals/VM are ready
 kolla-genpwd
-kolla-ansible -i /inventory/lab bootstrap-servers
-kolla-ansible -i /inventory/lab prechecks
-kolla-ansible -i /inventory/lab deploy
-kolla-ansible -i /inventory/lab post-deploy
-kolla-ansible -i /inventory/lab check
+kolla-ansible -i /inventory/multinode bootstrap-servers
+kolla-ansible -i /inventory/multinode prechecks
+kolla-ansible -i /inventory/multinode deploy
+kolla-ansible -i /inventory/multinode post-deploy
+kolla-ansible -i /inventory/multinode check
 source /etc/kolla/admin-openrc.sh
 # create public network
 openstack network create --external --provider-physical-network physnet1 --provider-network-type flat public1

@@ -101,9 +101,4 @@ openstack user create --project lab --password labpassword labuser
 openstack role add --user labuser --project lab admin
 ```
 
-Most kolla parameters are driven by the files in [ssh/kolla](./ssh/kolla), using Ansible inventory that I preconfigured for this playground [ssh/inventory](./ssh/inventory/lab).
-
-The web interface will be accessible on the 192.168.25.68/24 network. We can use an ssh forward to get to it :
-```
-ssh root@localhost -p 2222 -L 18080:192.168.25.68:80 # labpassword as in ssh/Dockerfile
-```
+Most kolla parameters are driven by the files in [provisioner/kolla](./provisioner/kolla), using Ansible inventory that I preconfigured for this playground [provisioner/inventory](./provisioner/inventory/lab).

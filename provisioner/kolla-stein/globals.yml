@@ -12,11 +12,11 @@
 #config_strategy: "COPY_ALWAYS"
 
 # Valid options are ['centos', 'debian', 'oraclelinux', 'rhel', 'ubuntu']
-kolla_base_distro: "centos"
+#kolla_base_distro: "centos"
 
 # Valid options are [ binary, source ]
 #kolla_install_type: "binary"
-kolla_install_type: "source"
+#kolla_install_type: "source"
 
 # Valid option is Docker repository tag
 openstack_release: "stein"
@@ -161,7 +161,7 @@ neutron_external_interface: "enp0s4"
 # Region options
 ################
 # Use this option to change the name of this region.
-#openstack_region_name: "RegionOne"
+openstack_region_name: "Lab"
 
 # Use this option to define a list of region names - only needs to be configured
 # in a multi-region deployment, and then only in the *first* region.
@@ -438,7 +438,7 @@ glance_enable_rolling_upgrade: "no"
 #nova_backend_ceph: "{{ enable_ceph }}"
 
 # Valid options are [ qemu, kvm, vmware, xenapi ]
-#nova_compute_virt_type: "kvm"
+nova_compute_virt_type: "kvm"
 
 # The number of fake driver per compute node
 #num_nova_fake_per_node: 5

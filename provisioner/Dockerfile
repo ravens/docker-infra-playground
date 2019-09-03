@@ -12,6 +12,7 @@ RUN echo "\nforks=100" >> /root/.ansible.cfg
 RUN apt-get -qy install vim
 RUN apt-get -qy install screen tmux
 
+RUN apt-get -qy install iputils-ping
 
 WORKDIR /root
 
@@ -23,5 +24,7 @@ RUN pip install -U pip
 RUN apt-get -qy install ansible
 
 RUN pip install kolla-ansible
+
+RUN pip install openstackclient
 
 ENTRYPOINT ["sleep","infinity"]

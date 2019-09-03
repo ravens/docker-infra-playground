@@ -79,6 +79,7 @@ First let's verify that all 3 nodes are up and running (using SSH/VNC). Once thi
 
 ```
 ansible -m ping -i /inventory/multinode all # check if all the baremetals/VM are ready
+ansible-playbook -i /inventory/multinode -l control,compute /inventory/prepare-hosts.yml # fix bugs related to /etc/hosts for smooth ansible-kolla execution
 kolla-genpwd
 kolla-ansible -i /inventory/multinode bootstrap-servers
 kolla-ansible -i /inventory/multinode prechecks

@@ -9,14 +9,14 @@ compute:
         type: host
         kvm_enabled: true
     memory:
-        size: 4096 
+        size: 8192 
     storage_backend:
         -
             type: ahci
             max_drive_per_controller: 6 
             drives:
             -
-                size: 8
+                size: 15
     networks:
         -
             network_mode: bridge 

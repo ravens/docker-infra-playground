@@ -7,5 +7,5 @@ export OS_PASSWORD=oUgC9pmIp7zEpFq51qW18bajDNZda187ngqruC1f
 export OS_AUTH_URL=http://192.168.25.200:35357/v3
 export OS_INTERFACE=internal
 export OS_IDENTITY_API_VERSION=3
-export OS_REGION_NAME=RegionOne
+export OS_REGION_NAME=Lab
 export OS_AUTH_PLUGIN=password

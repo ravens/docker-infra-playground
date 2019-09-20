@@ -1,0 +1,31 @@
+{
+  "ignition": {
+    "config": {},
+    "timeouts": {},
+    "version": "2.1.0"
+  },
+  "networkd": {},
+  "passwd": {
+    "users": [
+      {
+      	"groups": [
+          "sudo",
+          "docker"
+        ],
+        "name": "ravens",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/sSZqOv3Smz29YNvpvbgEMlzjQpoCMK9YudNAimvCZGVbtVEfC6eYXhpkDhdlqsUrA3hnTpF7OhOhaJzwSXqTbOIczAoKaC29YWNnRwhZOxhaXa0m6w3tuYOCP9ZXRJ5UzNjKFvdFX7U7Lr7eY/q5LqKzSXHAQhogxePE4Sbnbs+zroId2o3quG2qBXaXWx8kOoa8NBToFuvJKgNeSY27g9hDnNfyu28ZY3WvzkZTEjsac1/WVbxn5IMvb2F94d7LmjIc9nhtxE4Dl74I6CFFWQjisX4Ijs3QyerRCdGgz5HAth3Mzjt5zgAN8ypqLrCFyERkKi3UP8Ecs8sRfCA9 yan@pc-509947"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enable": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+#!ipxe
+
+# This script is called once the iPXE engine is loaded on the virtual node. With Infrasim, the node is by default running iPXE. On a physical node, you would probably use legacy PXE to boot an iPXE client to be able to boot over iSCSI, HTTP etc.
+
+
+#set base-url http://192.168.25.3
+#kernel ${base-url}/vmlinuz
+#initrd ${base-url}/initrd.img
+#imgargs vmlinuz boot=live config username=urbackup toram noswap fetch=http://192.168.25.3/filesystem.squashfs
+#boot
+
+
+set base-url http://stable.release.core-os.net/amd64-usr/current
+kernel ${base-url}/coreos_production_pxe.vmlinuz initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot=1 coreos.config.url=http://192.168.25.3/pxe-config.ign cloud-config-url=http://192.168.25.3/cloud-config.sh
+initrd ${base-url}/coreos_production_pxe_image.cpio.gz
+boot

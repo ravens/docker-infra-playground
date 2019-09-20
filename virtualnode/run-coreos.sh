@@ -30,9 +30,11 @@ fi
 infrasim node start
 
 # turn immedialy node off
-#ipmitool -H localhost -U admin -P admin chassis power off
+ipmitool -H localhost -U admin -P admin chassis power off
 
 # change boot option if needed
-#ipmitool -H localhost -U admin -P admin chassis bootdev pxe options=persistent
+ipmitool -H localhost -U admin -P admin chassis bootdev disk options=persistent
+
+ipmitool -H localhost -U admin -P admin chassis power on
 
 tail -f /var/log/infrasim/default/*.log
